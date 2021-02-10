@@ -1,0 +1,26 @@
+npm install -g nodemon
+npm set prefix ~/.npm
+PATH="$HOME/.npm/bin:$PATH"
+npm init
+npm install lodash
+npm install express
+npm install ejs
+npm install morgan
+npm install mongoose
+npm install --save express-session
+nodemon app
+
+
+
+
+
+--Docker--
+
+docker run --rm -dit -e MYSQL_ROOT_PASSWORD=pass --name mysql -p 3306:3306 mysql:5.7
+
+docker exec -it mysql bash
+
+mysql -h 127.0.0.1 -u root -p
+
+CREATE DATABASE matcha;
+

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <%- include('./partials/head.ejs') %>
+<body>
+    <%- include('./partials/nav.ejs') %>
+    
+    <div class="form3">
+        <form method="POST">
+            <select id="sort" name="sort">
+                <option value="<%= sort %>">Sort by: <%= sort %></option>
+                <option value="Geoographic Area">Geoographic Area</option>
+                <option value="Common Tags">Common Tags</option>
+                <option value="Fame Rating">Fame Rating</option>
+            </select>
+            <input type="submit" name="update" id="update" hidden>
+        </form>
+        <br>
+        <br>
+        <br>
+        <img style="height: 10vw;" src='<%= row.img0 %>'>
+        <h2 style="text-transform: capitalize;"><%= row.firstname %> <%= row.lastname %></h2>
+        <h4>Gender : <%= row.gender %></h4>
+        <h4>Sexuality : <%= row.preference %></h4>
+        <h5>Fame Rating : <%= row.rating %></h5>
+        <h5>Tags : <%= row.tags %></h5>
+        <h5>Bio : <%= row.bio %></h5>
+        <h5>Distance : <%= row.distance %> km</h5>
+    </div>
+</body>
+    <%- include('./partials/footer.ejs') %>
+</html>
+
+<script>
+    $('#sort').change(function() {
+        $('#update').trigger('click');
+    });
+</script>

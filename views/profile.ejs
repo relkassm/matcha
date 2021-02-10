@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <%- include('./partials/head.ejs') %>
+<body>
+    <%- include('./partials/nav.ejs') %>
+    <div class="form2">
+        <h2 style="text-transform: capitalize;"><%= row.username %>'s Profile</h2>
+        <form action="/profile" method="POST">
+            <img id="pic0" class="dp" src="<%= row.img0 %>">
+            <h4 class="labels">Email</h4>
+            <input class="inputs2" value="<%= row.email %>" type="text" id="email" name="email" required>
+            <h4 class="labels">Username</h4>
+            <input class="inputs2" value="<%= row.username %>" type="text" id="username" name="username" required>
+            <h4 class="labels">Last Name</h4>
+            <input class="inputs2" value="<%= row.lastname %>" type="text" id="lastname" name="lastname" required>
+            <h4 class="labels">First Name</h4>
+            <input class="inputs2" value="<%= row.firstname %>" type="text" id="firstname" name="firstname" required>
+            <h4 class="labels">Password</h4>
+            <input class="inputs2" value="<%= row.password %>" type="password" id="password" name="password" required>
+            <h4 class="labels">Gender</h4>
+            <select class="inputs2" id="gender" name="gender">
+                <option value="<%= row.gender %>">Select a gender (<%= row.gender %>)</option>
+                <option value="Rapist">Rapist</option>
+                <option value="Dishwasher">Dishwasher</option>
+            </select>
+            <h4 class="labels">Sexual Preferences</h4>
+            <select class="inputs2" id="preference" name="preference">
+                <option value="<%= row.preference %>">Select a sexuality (<%= row.preference %>)</option>
+                <option value="Bisexual">Bisexual</option>
+                <option value="Heterosexual">Heterosexual</option>
+                <option value="Homosexual">Homosexual</option>
+            </select>
+            <h4 class="labels">Interests</h4>
+            <h6 id="tags" class="tags"><%= row.tags %></h6>
+            <input type="hidden" value="<%= row.tags %>" id="hugs" name="hugs">
+            <button type="button" class="smol" id="plus" style="background: #00FF00">+</button>
+            <button type="button" class="smol" id="minus" style="background: #0000FF">-</button>
+            <button type="button" class="smol" id="reset" style="background: #FF0000">x</button>
+            <button type="button" class="smol" id="add" style="display: none; background: #00FF00;">+</button>
+            <input type="text" name="tag" class="inputs2" id="tag" style="display: none;">
+            <h4 class="labels">Bio</h4>
+            <textarea class="tarea" id="bio" name="bio"><%= row.bio %></textarea>
+            <input type="submit" name="update" class="submit" value="Update" id="update">
+            <div class="images">
+                <img id="pic1" class="imgs" src="<%= row.img1 %>">
+                <img id="pic2" class="imgs" src="<%= row.img2 %>">
+                <img id="pic3" class="imgs" src="<%= row.img3 %>">
+                <img id="pic4" class="imgs" src="<%= row.img4 %>">
+                <!-- <input type="submit" name="del1" value="x"> -->
+                <!-- <input type="submit" name="del2" value="x"> -->
+                <!-- <input type="submit" name="del3" value="x"> -->
+                <!-- <input type="submit" name="del4" value="x"> -->
+            </div>
+            <canvas id="can0" hidden></canvas>
+            <canvas id="can1" hidden></canvas>
+            <canvas id="can2" hidden></canvas>
+            <canvas id="can3" hidden></canvas>
+            <canvas id="can4" hidden></canvas>
+            <input type="hidden" value="<%= row.img0 %>" id="img0" name="img0">
+            <input type="hidden" value="<%= row.img1 %>" id="img1" name="img1">
+            <input type="hidden" value="<%= row.img2 %>" id="img2" name="img2">
+            <input type="hidden" value="<%= row.img3 %>" id="img3" name="img3">
+            <input type="hidden" value="<%= row.img4 %>" id="img4" name="img4">
+            <input type="file" id="f0" hidden>           
+            <input type="file" id="f1" hidden>
+            <input type="file" id="f2" hidden>
+            <input type="file" id="f3" hidden>
+            <input type="file" id="f4" hidden>
+        </form>
+    </div>
+</body>
+    <%- include('./partials/footer.ejs') %>
+</html>
+
+
+<script>
+
+var f0 = document.getElementById('f0');
+var f1 = document.getElementById('f1');
+var f2 = document.getElementById('f2');
+var f3 = document.getElementById('f3');
+var f4 = document.getElementById('f4');
+
+var can0 = document.getElementById('can0');
+var can1 = document.getElementById('can1');
+var can2 = document.getElementById('can2');
+var can3 = document.getElementById('can3');
+var can4 = document.getElementById('can4');
+
+var ctx0 = can0.getContext('2d');
+var ctx1 = can1.getContext('2d');
+var ctx2 = can2.getContext('2d');
+var ctx3 = can3.getContext('2d');
+var ctx4 = can4.getContext('2d');
+
+var img0 = document.getElementById('img0');
+var img1 = document.getElementById('img1');
+var img2 = document.getElementById('img2');
+var img3 = document.getElementById('img3');
+var img4 = document.getElementById('img4');
+
+$('#pic0').click(function(){ $('#f0').trigger('click'); });
+$('#pic1').click(function(){ $('#f1').trigger('click'); });
+$('#pic2').click(function(){ $('#f2').trigger('click'); });
+$('#pic3').click(function(){ $('#f3').trigger('click'); });
+$('#pic4').click(function(){ $('#f4').trigger('click'); });
+
+
+
+f0.onchange = function(e) {
+var im0 = new Image();
+    im0.onload = draw0;
+    im0.onerror = failed0;
+    im0.src = URL.createObjectURL(this.files[0]);    
+}
+function draw0() {
+    can0.width = this.width;
+    can0.height = this.height;
+    ctx0.drawImage(this, 0, 0);
+    img0.value = can0.toDataURL();
+    $('#update').trigger('click');
+}
+function failed0() {
+    alert("Please chose a valid image file");
+    f0.value = '';
+}
+
+
+
+f1.onchange = function(e) {
+var im1 = new Image();
+    im1.onload = draw1;
+    im1.onerror = failed1;
+    im1.src = URL.createObjectURL(this.files[0]);
+}
+function draw1() {
+    can1.width = this.width;
+    can1.height = this.height;
+    ctx1.drawImage(this, 0, 0);
+    img1.value = can1.toDataURL();
+    $('#update').trigger('click');
+}
+function failed1() {
+    alert("Please chose a valid image file");
+    f1.value = '';
+}
+
+
+
+f2.onchange = function(e) {
+var im2 = new Image();
+    im2.onload = draw2;
+    im2.onerror = failed2;
+    im2.src = URL.createObjectURL(this.files[0]);
+}
+function draw2() {
+    can2.width = this.width;
+    can2.height = this.height;
+    ctx2.drawImage(this, 0, 0);
+    if (!img1.value) {
+        img1.value = can2.toDataURL();
+    } else {
+        img2.value = can2.toDataURL();
+    }
+    $('#update').trigger('click');
+}
+function failed2() {
+    alert("Please chose a valid image file");
+    f2.value = '';
+}
+
+
+
+f3.onchange = function(e) {
+var im3 = new Image();
+    im3.onload = draw3;
+    im3.onerror = failed3;
+    im3.src = URL.createObjectURL(this.files[0]);
+}
+function draw3() {
+    can3.width = this.width;
+    can3.height = this.height;
+    ctx3.drawImage(this, 0, 0);
+    if (!img1.value) {
+        img1.value = can3.toDataURL();
+    } else if (!img2.value) {
+        img2.value = can3.toDataURL();
+    } else {
+        img3.value = can3.toDataURL();
+    }
+    $('#update').trigger('click');
+}
+function failed3() {
+    alert("Please chose a valid image file");
+    f3.value = '';
+}
+
+
+
+f4.onchange = function(e) {
+var im4 = new Image();
+    im4.onload = draw4;
+    im4.onerror = failed4;
+    im4.src = URL.createObjectURL(this.files[0]);
+}
+function draw4() {
+    can4.width = this.width;
+    can4.height = this.height;
+    ctx4.drawImage(this, 0, 0);
+    if (!img1.value) {
+        img1.value = can4.toDataURL();
+    } else if (!img2.value) {
+        img2.value = can4.toDataURL();
+    } else if (!img3.value) {
+        img3.value = can4.toDataURL();
+    } else {
+        img4.value = can4.toDataURL();
+    }
+    $('#update').trigger('click');
+}
+function failed4() {
+    alert("Please chose a valid image file");
+    f4.value = '';
+}
+
+$('#plus').click(function() {
+    $('#plus').css('display', 'none');
+    $('#minus').css('display', 'none');
+    $('#reset').css('display', 'none');
+    $('#tag').css('display', 'block');
+    $('#add').css('display', 'block');
+});
+
+$('#add').click(function() {
+    $('#plus').css('display', 'block');
+    $('#minus').css('display', 'block');
+    $('#reset').css('display', 'block');
+    $('#tag').css('display', 'none');
+    $('#add').css('display', 'none');
+    if ($('#tag').val())
+    {
+        var tags = $('#tags').html().concat(' #', $('#tag').val())
+        $('#tags').html(tags);
+        $('#hugs').val(tags);
+        $('#tag').val('');
+    }
+});
+
+$('#minus').click(function() {
+    var tags = $('#tags').html();
+    var last = tags.lastIndexOf(" ");
+    if (tags){
+        tags = tags.substring(0, last);
+        $('#tags').html(tags);
+        $('#hugs').val(tags);
+    }
+});
+
+$('#reset').click(function() {
+    $('#tags').html('');
+    $('#hugs').val('');
+});
+
+</script>
