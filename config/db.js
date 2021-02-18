@@ -33,4 +33,12 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                             console.log(error);
                   });
 
+connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
+                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
+                  liker INT(6) UNSIGNED, \
+                  liked INT(6) UNSIGNED)", (error) => {
+                        if (error)
+                            console.log(error);
+                  });
+
 module.exports = connection;

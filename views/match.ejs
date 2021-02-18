@@ -13,18 +13,20 @@
                 <option value="Fame Rating">Fame Rating</option>
             </select>
             <input type="submit" name="update" id="update" hidden>
+            <br>
+            <br>
+            <br>
+            <img style="height: 10vw;" src='<%= row.img0 %>'>
+            <h2 style="text-transform: capitalize;"><%= row.firstname %> <%= row.lastname %></h2>
+            <h4>Gender : <%= row.gender %></h4>
+            <h4>Sexuality : <%= row.preference %></h4>
+            <h5>Fame Rating : <%= row.rating %></h5>
+            <h5>Tags : <%= row.tags %></h5>
+            <h5>Bio : <%= row.bio %></h5>
+            <h5>Distance : <%= row.distance %> km</h5>
+            <input type="submit" name="like" id="like" value="like">
+            <input type="submit" name="dislike" id="dislike" value="dislike">
         </form>
-        <br>
-        <br>
-        <br>
-        <img style="height: 10vw;" src='<%= row.img0 %>'>
-        <h2 style="text-transform: capitalize;"><%= row.firstname %> <%= row.lastname %></h2>
-        <h4>Gender : <%= row.gender %></h4>
-        <h4>Sexuality : <%= row.preference %></h4>
-        <h5>Fame Rating : <%= row.rating %></h5>
-        <h5>Tags : <%= row.tags %></h5>
-        <h5>Bio : <%= row.bio %></h5>
-        <h5>Distance : <%= row.distance %> km</h5>
     </div>
 </body>
     <%- include('./partials/footer.ejs') %>
