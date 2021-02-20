@@ -22,5 +22,15 @@ docker exec -it mysql bash
 
 mysql -h 127.0.0.1 -u root -p
 
-CREATE DATABASE matcha;
+mysql>
+
+	CREATE DATABASE matcha;
+
+mysql --max_allowed_packet=100M -u root -p matcha
+
+mysql>
+
+	set global net_buffer_length=1000000;
+
+	set global max_allowed_packet=1000000000;
 

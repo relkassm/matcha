@@ -31,13 +31,11 @@
                 <option value="Homosexual">Homosexual</option>
             </select>
             <h4 class="labels">Interests</h4>
-            <h6 id="tags" class="tags"><%= row.tags %></h6>
-            <input type="hidden" value="<%= row.tags %>" id="hugs" name="hugs">
-            <button type="button" class="smol" id="plus" style="background: #00FF00">+</button>
-            <button type="button" class="smol" id="minus" style="background: #0000FF">-</button>
-            <button type="button" class="smol" id="reset" style="background: #FF0000">x</button>
-            <button type="button" class="smol" id="add" style="display: none; background: #00FF00;">+</button>
-            <input type="text" name="tag" class="inputs2" id="tag" style="display: none;">
+            <h6 id="tags" class="tags"><%= tags %></h6>
+            <input type="text" name="tag" class="" id="tag">
+            <input type="submit" name="add_tag" class="" id="add_tag" value="+">
+            <input type="submit" name="remove_tag" class="" id="remove_tag" value="-">
+            <input type="submit" name="reset_tag" class="" id="reset_tag" value="x">
             <h4 class="labels">Bio</h4>
             <textarea class="tarea" id="bio" name="bio"><%= row.bio %></textarea>
             <input type="submit" name="update" class="submit" value="Update" id="update">
@@ -223,42 +221,5 @@ function failed4() {
     f4.value = '';
 }
 
-$('#plus').click(function() {
-    $('#plus').css('display', 'none');
-    $('#minus').css('display', 'none');
-    $('#reset').css('display', 'none');
-    $('#tag').css('display', 'block');
-    $('#add').css('display', 'block');
-});
-
-$('#add').click(function() {
-    $('#plus').css('display', 'block');
-    $('#minus').css('display', 'block');
-    $('#reset').css('display', 'block');
-    $('#tag').css('display', 'none');
-    $('#add').css('display', 'none');
-    if ($('#tag').val())
-    {
-        var tags = $('#tags').html().concat(' #', $('#tag').val())
-        $('#tags').html(tags);
-        $('#hugs').val(tags);
-        $('#tag').val('');
-    }
-});
-
-$('#minus').click(function() {
-    var tags = $('#tags').html();
-    var last = tags.lastIndexOf(" ");
-    if (tags){
-        tags = tags.substring(0, last);
-        $('#tags').html(tags);
-        $('#hugs').val(tags);
-    }
-});
-
-$('#reset').click(function() {
-    $('#tags').html('');
-    $('#hugs').val('');
-});
 
 </script>

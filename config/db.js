@@ -21,7 +21,6 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   bio VARCHAR(255), \
                   online INT(6) DEFAULT 0,\
                   rating INT(6) DEFAULT 0,\
-                  tags LONGTEXT, \
                   lat DECIMAL(10, 8), \
                   lng DECIMAL(11, 8), \
                   img0 LONGTEXT, \
@@ -35,8 +34,28 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
 
 connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
                   (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
-                  liker INT(6) UNSIGNED, \
-                  liked INT(6) UNSIGNED)", (error) => {
+                  liker INT(6) UNSIGNED NOT NULL, \
+                  liked INT(6) UNSIGNED NOT NULL, \
+                  FOREIGN KEY (liker) REFERENCES user(id), \
+                  FOREIGN KEY (liked) REFERENCES user(id));", (error) => {
+                        if (error)
+                            console.log(error);
+                  });
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.tag \
+                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
+                  label VARCHAR(30) NOT NULL UNIQUE);", (error) => {
+                        if (error)
+                            console.log(error);
+                  });
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.user_tag \
+                  (id_user INT(6) UNSIGNED, \
+                  id_tag INT(6) UNSIGNED, \
+                  time TIMESTAMP NOT NULL,\
+                  FOREIGN KEY (id_user) REFERENCES user(id), \
+                  FOREIGN KEY (id_tag) REFERENCES tag(id), \
+                  PRIMARY KEY (id_user, id_tag));", (error) => {
                         if (error)
                             console.log(error);
                   });

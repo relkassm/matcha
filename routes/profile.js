@@ -14,24 +14,33 @@ router.get('/', (req, res) => {
     if (req.session.userid != 0)
     {
         navigator.geolocation.getCurrentPosition(pos => {
-            const qrr = "UPDATE user SET lat=".concat(pos.latitude,", lng=", pos.longitude," WHERE id=", req.session.userid, ";");
-            connection.query(qrr, (error) => {
+            connection.query("UPDATE user SET lat = ? , lng = ? WHERE id = ? ;", [pos.latitude, pos.longitude, req.session.userid], (error) => {
                 if (error) {
                     console.log(error);
                 }
             });    
         });
 
-        
-        const qr = "SELECT * FROM user WHERE user.id = ".concat(req.session.userid);
-        connection.query(qr, (error, rows) => {
+        connection.query("SELECT * FROM user WHERE user.id = ? ;", req.session.userid, (error, rows) => {
             if (error) {
                 console.log(error);
             } else {
                 var row = rows[0];
-                res.render('profile', { title: 'Profile', row, session});
+                connection.query("SELECT tag.label FROM tag INNER JOIN user_tag ON tag.id=user_tag.id_tag WHERE user_tag.id_user = ? ORDER BY time asc;", req.session.userid, (error, rows1) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    var tags = '';
+                    for (var i = 0; i < rows1.length; i++) {
+                        tags = tags.concat('#', rows1[i].label, " ");
+                    }
+                    res.render('profile', { title: 'Profile', row, tags, session});
             }
         });
+            }
+        });
+
+        
     }
     else
         res.redirect('login');
@@ -39,27 +48,94 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
     if (req.body.update) {
-        const qr = "UPDATE user SET email='".concat(req.body.email,"', \
-                    username='",req.body.username,"', \
-                    lastname='", req.body.lastname,"', \
-                    firstname='", req.body.firstname,"', \
-                    password='", req.body.password,"', \
-                    gender='", req.body.gender,"', \
-                    preference='", req.body.preference,"', \
-                    bio='", req.body.bio, "', \
-                    tags='", req.body.hugs, "', \
-                    img0='", req.body.img0, "', \
-                    img1='", req.body.img1, "', \
-                    img2='", req.body.img2, "', \
-                    img3='", req.body.img3, "', \
-                    img4='", req.body.img4, "' \
-                    WHERE id=", req.session.userid, ";");
-        connection.query(qr, (error) => {
+        connection.query("UPDATE user SET email = ?,\
+                        username = ?, \
+                        lastname = ?, \
+                        firstname = ?, \
+                        password = ?, \
+                        gender = ?, \
+                        preference = ?, \
+                        bio = ?, \
+                        img0 = ?, \
+                        img1 = ?, \
+                        img2 = ?, \
+                        img3 = ?, \
+                        img4 = ? \
+                        WHERE id = ?;",
+                        [req.body.email,
+                        req.body.username,
+                        req.body.lastname,
+                        req.body.firstname,
+                        req.body.password,
+                        req.body.gender,
+                        req.body.preference,
+                        req.body.bio,
+                        req.body.img0,
+                        req.body.img1,
+                        req.body.img2,
+                        req.body.img3,
+                        req.body.img4,
+                        req.session.userid], (error) => {
             if (error) {
                 console.log(error);
             }
         });
-    } 
+    }
+    if (req.body.add_tag) {
+        connection.query("SELECT * FROM tag;", (error, tag_list) => {
+            if (error) {
+                console.log(error);
+            } else {
+                var flag = 0;
+                for (var i = 0; i < tag_list.length; i++) {
+                    if (req.body.tag == tag_list[i].label) {
+                        flag = 1;
+                        connection.query("INSERT INTO user_tag (id_user, id_tag, time) VALUES (?, (SELECT tag.id FROM tag WHERE tag.label = ? ), now());", [req.session.userid, req.body.tag], (error) => {
+                            if (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                }
+                if (flag == 0 && req.body.tag) {
+                            console.log(flag);
+                    connection.query("INSERT INTO tag (label) VALUES (?);", req.body.tag, (error) => {
+                        if (error) {
+                            console.log(error);
+                        }
+                        else {
+                            connection.query("INSERT INTO user_tag (id_user, id_tag, time) VALUES (?, (SELECT tag.id FROM tag WHERE tag.label = ? ), now());", [req.session.userid, req.body.tag], (error) => {
+                                if (error) {
+                                    console.log(error);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    if (req.body.remove_tag) {
+        connection.query("DELETE FROM user_tag WHERE id_user = ? ORDER BY time DESC LIMIT 1;", req.session.userid, (error) => {
+            if (error) {
+                console.log(error);
+            }
+        });
+
+    }
+    
+    if (req.body.reset_tag) {
+        connection.query("DELETE FROM user_tag where id_user = ?;", req.session.userid, (error) => {
+            if (error) {
+                console.log(error);
+            }
+        });
+    }
+
+
+
+
     // else if (req.body.del1) {
     //     const qr = "UPDATE User SET img1='' WHERE id=".concat(req.session.userid, ";");
     //     connection.query(qr, (error) => {
