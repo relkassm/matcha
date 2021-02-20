@@ -20,6 +20,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   preference VARCHAR(30) DEFAULT 'Bisexual', \
                   bio VARCHAR(255), \
                   online INT(6) DEFAULT 0,\
+                  active INT(6) DEFAULT 1,\
                   rating INT(6) DEFAULT 0,\
                   lat DECIMAL(10, 8), \
                   lng DECIMAL(11, 8), \
@@ -42,6 +43,16 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
                             console.log(error);
                   });
 
+connection.query("CREATE TABLE IF NOT EXISTS matcha.dislike \
+                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
+                  disliker INT(6) UNSIGNED NOT NULL, \
+                  disliked INT(6) UNSIGNED NOT NULL, \
+                  FOREIGN KEY (disliker) REFERENCES user(id), \
+                  FOREIGN KEY (disliked) REFERENCES user(id));", (error) => {
+                        if (error)
+                            console.log(error);
+                  });
+
 connection.query("CREATE TABLE IF NOT EXISTS matcha.tag \
                   (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
                   label VARCHAR(30) NOT NULL UNIQUE);", (error) => {
@@ -56,6 +67,17 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user_tag \
                   FOREIGN KEY (id_user) REFERENCES user(id), \
                   FOREIGN KEY (id_tag) REFERENCES tag(id), \
                   PRIMARY KEY (id_user, id_tag));", (error) => {
+                        if (error)
+                            console.log(error);
+                  });
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.match \
+                  (id_user0 INT(6) UNSIGNED, \
+                  id_user1 INT(6) UNSIGNED, \
+                  time TIMESTAMP NOT NULL,\
+                  FOREIGN KEY (id_user0) REFERENCES user(id), \
+                  FOREIGN KEY (id_user1) REFERENCES user(id), \
+                  PRIMARY KEY (id_user0, id_user1));", (error) => {
                         if (error)
                             console.log(error);
                   });

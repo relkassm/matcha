@@ -34,3 +34,14 @@ mysql>
 
 	set global max_allowed_packet=1000000000;
 
+
+
+
+
+
+
+
+IMPORTING DATABASE
+
+mysqldump matcha > backup-file.sql
+docker cp #id-container#:/backup-file.sql /Users/relkassm/Desktop/

@@ -3,6 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 const connection = require('./config/db');
+
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.json({limit: '50mb'}));
@@ -39,6 +40,13 @@ app.get('/', (req, res) => {
         res.redirect('/login');
     else
         res.redirect('/profile');
+});
+
+app.get('/405', (req, res) => {
+    if (req.session.userid == 0)
+        res.redirect('/login');
+    else
+        res.render('405', { title: 'Error' });
 });
 
 app.use(function (req, res, next) {

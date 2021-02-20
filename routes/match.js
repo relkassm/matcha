@@ -26,24 +26,28 @@ router.get('/', (req, res) =>  {
                 connected = rowss[0];
                 if (connected.gender == 'Man') {
                     if (connected.preference == 'Heterosexual') {
-                        qr2 = " AND gender = 'Woman' AND (preference='Heterosexual' OR preference='Bisexual');"
+                        qr2 = " AND (gender = 'Woman' AND (preference='Heterosexual' OR preference='Bisexual'));"
                     } else if (connected.preference == 'Homosexual') {
-                        qr2 = " AND gender = 'Man' AND (preference='Homosexual' OR preference='Bisexual');"
+                        qr2 = " AND (gender = 'Man' AND (preference='Homosexual' OR preference='Bisexual'));"
                     } else {
-                        qr2 = " AND (gender = 'Man' AND (preference='Homosexual' OR preference='Bisexual')) \
-                                OR (gender = 'Woman' AND (preference='Heterosexual' OR preference='Bisexual'));"
+                        qr2 = " AND ((gender = 'Man' AND (preference='Homosexual' OR preference='Bisexual')) \
+                                OR (gender = 'Woman' AND (preference='Heterosexual' OR preference='Bisexual')));"
                     }
                 } else {
                     if (connected.preference == 'Heterosexual') {
-                        qr2 = " AND gender = 'Man' AND (preference='Heterosexual' OR preference='Bisexual');"
+                        qr2 = " AND (gender = 'Man' AND (preference='Heterosexual' OR preference='Bisexual'));"
                     } else if (connected.preference == 'Homosexual') {
-                        qr2 = " AND gender = 'Woman' AND (preference='Homosexual' OR preference='Bisexual');"
+                        qr2 = " AND (gender = 'Woman' AND (preference='Homosexual' OR preference='Bisexual'));"
                     } else {
-                        qr2 = " AND (gender = 'Woman' AND (preference='Homosexual' OR preference='Bisexual')) \
-                                OR (gender = 'Man' AND (preference='Heterosexual' OR preference='Bisexual'));"
+                        qr2 = " AND ((gender = 'Woman' AND (preference='Homosexual' OR preference='Bisexual')) \
+                                OR (gender = 'Man' AND (preference='Heterosexual' OR preference='Bisexual')));"
                     }
                 }
-                qr = "SELECT * FROM user WHERE id !=".concat(ss.userid, qr2);
+                qr = "SELECT * FROM user WHERE user.id != ".concat(ss.userid, " \
+                    AND user.id NOT IN (SELECT liked FROM matcha.like \
+                    WHERE liker = ", ss.userid, ") ", " \
+                    AND user.id NOT IN (SELECT disliked FROM matcha.dislike \
+                    WHERE disliker = ", ss.userid, ") ", qr2);
                 connection.query(qr, (error, rows) => {
                     if (error) {
                         console.log(error);
@@ -196,8 +200,6 @@ router.get('/', (req, res) =>  {
                                     });
                                 }
                             }
-
-                            
                         } else
                             res.redirect('405'); //No user found
                     }
@@ -216,17 +218,32 @@ router.post('/', (req, res) => {
         res.redirect('/match');
     }
     if (req.body.like) {
-        qr = "INSERT INTO matcha.like (liker, liked) VALUES(".concat(connected.id, ", ", row.id, ");");
-        connection.query(qr, (error, rowss) => {
+        connection.query("INSERT INTO matcha.like (liker, liked) VALUES(?, ?);", [connected.id, row.id], (error) => {
             if (error) {
                 console.log(error);
             } else {
-                console.log('Halfway there');
+                connection.query("SELECT * FROM matcha.like WHERE liker = ? AND liked = ?;", [row.id, connected.id], (error, rowss) => {
+                    if (error) {
+                        console.log(error);
+                    } else if (rowss.length) {
+                        connection.query("INSERT INTO matcha.match (id_user0, id_user1, time) VALUES(?, ?, now());", [row.id, connected.id], (error) => {
+                            if (error) {
+                                console.log(error);
+                            }
+                        });
+                    }
+                });
             }
         });
         res.redirect('/match');
     }
     if (req.body.dislike) {
+        connection.query("INSERT INTO matcha.dislike (disliker, disliked) VALUES(?, ?);", [connected.id, row.id], (error) => {
+            if (error) {
+                console.log(error);
+            } else {
+            }
+        });
         res.redirect('/match');
     }
 });
