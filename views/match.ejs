@@ -8,11 +8,28 @@
         <form method="POST">
             <select id="sort" name="sort">
                 <option value="<%= sort %>">Sort by: <%= sort %></option>
-                <option value="Geoographic Area">Geoographic Area</option>
+                <option value="Distance">Distance</option>
+                <option value="Age">Age</option>
                 <option value="Common Tags">Common Tags</option>
                 <option value="Fame Rating">Fame Rating</option>
             </select>
-            <input type="submit" name="update" id="update" hidden>
+            <select id="order" name="order">
+                <option value="<%= order %>">Order: <%= order %></option>
+                <option value="Ascending">Ascending</option>
+                <option value="Descending">Descending</option>
+            </select>
+            <br>
+            <br>
+            <select id="filter" name="filter">
+                <option value="<%= filter %>">Filter by: <%= filter %></option>
+                <option value="Distance">Distance</option>
+                <option value="Age">Age</option>
+                <option value="Common Tags">Common Tags</option>
+                <option value="Fame Rating">Fame Rating</option>
+            </select>
+            <br>
+            <br>
+            <input type="submit" name="update" id="update">
             <br>
             <br>
             <br>
@@ -21,8 +38,9 @@
             <h4>Gender : <%= row.gender %></h4>
             <h4>Sexuality : <%= row.preference %></h4>
             <h5>Fame Rating : <%= row.rating %></h5>
+            <h5>Age : <%= row.age %></h5>
             <h5>Tags : <%= final_tags %></h5>
-            <% if(locals.common_tagsfinal){ %>
+            <% if (locals.common_tagsfinal){ %>
             <h5 style="color: red;"><%= common_tagsfinal %></h5>
             <% } %>
             <h5>Bio : <%= row.bio %></h5>
@@ -39,4 +57,38 @@
     $('#sort').change(function() {
         $('#update').trigger('click');
     });
+    $('#order').change(function() {
+        $('#update').trigger('click');
+    });
+    $('#filter').change(function() {
+        $('#update').trigger('click');
+    });
+    $('#val0').focusout(function() {
+        $('#update').trigger('click');
+    });
+    $('#val1').focusout(function() {
+        $('#update').trigger('click');
+    });
+    if ($('#sort').find(':selected').text() == 'Sort by: Common Tags')
+        $('#order').hide();
+    // if ($('#filter').find(':selected').text() == 'Filter by: Distance')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').hide();
+    // }
+    // if ($('#filter').find(':selected').text() == 'Filter by: Age')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').show();
+    // }
+    // if ($('#filter').find(':selected').text() == 'Filter by: Common Tags')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').hide();
+    // }
+    // if ($('#filter').find(':selected').text() == 'Filter by: Fame Rating')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').show();
+    // }
 </script>

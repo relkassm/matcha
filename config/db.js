@@ -19,11 +19,13 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   gender VARCHAR(30), \
                   preference VARCHAR(30) DEFAULT 'Bisexual', \
                   bio VARCHAR(255), \
-                  online INT(6) DEFAULT 0,\
-                  active INT(6) DEFAULT 1,\
+                  age INT(6),\
                   rating INT(6) DEFAULT 0,\
                   lat DECIMAL(10, 8), \
                   lng DECIMAL(11, 8), \
+                  online INT(6) DEFAULT 0,\
+                  active INT(6) DEFAULT 1,\
+                  last_con TIMESTAMP,\
                   img0 LONGTEXT, \
                   img1 LONGTEXT, \
                   img2 LONGTEXT, \

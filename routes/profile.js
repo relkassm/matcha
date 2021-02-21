@@ -52,6 +52,7 @@ router.post('/', (req, res) => {
                         username = ?, \
                         lastname = ?, \
                         firstname = ?, \
+                        age = ?, \
                         password = ?, \
                         gender = ?, \
                         preference = ?, \
@@ -66,6 +67,7 @@ router.post('/', (req, res) => {
                         req.body.username,
                         req.body.lastname,
                         req.body.firstname,
+                        req.body.age,
                         req.body.password,
                         req.body.gender,
                         req.body.preference,
@@ -98,7 +100,6 @@ router.post('/', (req, res) => {
                     }
                 }
                 if (flag == 0 && req.body.tag) {
-                            console.log(flag);
                     connection.query("INSERT INTO tag (label) VALUES (?);", req.body.tag, (error) => {
                         if (error) {
                             console.log(error);
