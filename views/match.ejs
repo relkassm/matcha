@@ -6,6 +6,30 @@
     
     <div class="form3">
         <form method="POST">
+
+            <label>Distance :</label>
+            <label id="range_txt">s</label>
+            <input type="range" id="range" name="range" min="0" max="500" value="<%= distance_range %>" onchange="update_range(this.value);">
+            <br>
+            <br>
+            <label>Age :</label>
+            <input type="number" name="age_0" id="age_0" min="18" max="75" value="<%= age_0 %>" style="width: 4vw;">
+            <input type="number" name="age_1" id="age_1" min="18" max="75" value="<%= age_1 %>" style="width: 4vw;">
+            <br>
+            <br>
+            <label>Common Tags :</label>
+            <label id="range_txt1"></label>
+            <input type="range" id="range_1" name="range_1" min="0" max="20" value="<%= common_count %>" onchange="update_range1(this.value);">
+            <br>
+            <br>
+            <label>Fame :</label>
+            <label id="range_txt2"></label>
+            <input type="range" id="range_2" name="range_2" min="0" max="10000" value="<%= fame %>" onchange="update_range2(this.value);">
+            <br>
+            <br>
+            <input type="submit" name="update" id="update">
+            <br>
+            <br>
             <select id="sort" name="sort">
                 <option value="<%= sort %>">Sort by: <%= sort %></option>
                 <option value="Distance">Distance</option>
@@ -20,33 +44,23 @@
             </select>
             <br>
             <br>
-            <select id="filter" name="filter">
-                <option value="<%= filter %>">Filter by: <%= filter %></option>
-                <option value="Distance">Distance</option>
-                <option value="Age">Age</option>
-                <option value="Common Tags">Common Tags</option>
-                <option value="Fame Rating">Fame Rating</option>
-            </select>
             <br>
-            <br>
-            <input type="submit" name="update" id="update">
-            <br>
-            <br>
-            <br>
-            <img style="height: 10vw;" src='<%= row.img0 %>'>
-            <h2 style="text-transform: capitalize;"><%= row.firstname %> <%= row.lastname %></h2>
-            <h4>Gender : <%= row.gender %></h4>
-            <h4>Sexuality : <%= row.preference %></h4>
-            <h5>Fame Rating : <%= row.rating %></h5>
-            <h5>Age : <%= row.age %></h5>
-            <h5>Tags : <%= final_tags %></h5>
-            <% if (locals.common_tagsfinal){ %>
-            <h5 style="color: red;"><%= common_tagsfinal %></h5>
+            <% if (locals.row){ %>
+                <img style="height: 10vw;" src='<%= row.img0 %>'>
+                <h2 style="text-transform: capitalize;"><%= row.firstname %> <%= row.lastname %></h2>
+                <h4>Gender : <%= row.gender %></h4>
+                <h4>Sexuality : <%= row.preference %></h4>
+                <h5>Fame Rating : <%= row.rating %></h5>
+                <h5>Age : <%= row.age %></h5>
+                <h5>Tags : <%= final_tags %></h5>
+                <% if (locals.common_tagsfinal){ %>
+                    <h5 style="color: red;"><%= common_tagsfinal %></h5>
+                <% } %>
+                <h5>Bio : <%= row.bio %></h5>
+                <h5>Distance : <%= row.distance %> km</h5>
+                <input type="submit" name="like" id="like" value="like">
+                <input type="submit" name="dislike" id="dislike" value="dislike">
             <% } %>
-            <h5>Bio : <%= row.bio %></h5>
-            <h5>Distance : <%= row.distance %> km</h5>
-            <input type="submit" name="like" id="like" value="like">
-            <input type="submit" name="dislike" id="dislike" value="dislike">
         </form>
     </div>
 </body>
@@ -54,19 +68,36 @@
 </html>
 
 <script>
+
+    var range = document.getElementById('range');
+    var range_txt = document.getElementById('range_txt');
+    var range1 = document.getElementById('range_1');
+    var range_txt1 = document.getElementById('range_txt1');
+    var range2 = document.getElementById('range_2');
+    var range_txt2 = document.getElementById('range_txt2');
+
+    range_txt.innerHTML = range.value.concat(' km');
+
+    function update_range(val) {
+      range_txt.innerHTML=val.concat(' km');
+    }
+
+    range_txt1.innerHTML = range1.value;
+
+    function update_range1(val) {
+      range_txt1.innerHTML = val;
+    }
+
+    range_txt2.innerHTML = range2.value;
+
+    function update_range2(val) {
+      range_txt2.innerHTML = val;
+    }
+
     $('#sort').change(function() {
         $('#update').trigger('click');
     });
     $('#order').change(function() {
-        $('#update').trigger('click');
-    });
-    $('#filter').change(function() {
-        $('#update').trigger('click');
-    });
-    $('#val0').focusout(function() {
-        $('#update').trigger('click');
-    });
-    $('#val1').focusout(function() {
         $('#update').trigger('click');
     });
     if ($('#sort').find(':selected').text() == 'Sort by: Common Tags')
