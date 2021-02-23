@@ -21,6 +21,7 @@ var common_count = 0;
 var fame = 0;
 
 var row = [];
+var rw = [];
 var final_tags;
 
 router.get('/', (req, res) =>  {
@@ -126,19 +127,18 @@ router.get('/', (req, res) =>  {
                                                         common_tagsfinal = common_tagsfinal.concat('#', common_tags[k].label, " ");
                                                     }
                                                 }
-                                                res.render('match', { title: 'Match', row, sort, order, final_tags, common_tagsfinal, distance_range, age_0, age_1, common_count, fame});
+                                                res.render('search', { title: 'Search', row, sort, order, final_tags, common_tagsfinal, distance_range, age_0, age_1, common_count, fame});
                                             });
                                     } else if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                        res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                                        res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
                                 });
                             }    
                         }
                         else {
-                            var common_tags = '';
-                            var common_tagsfinal = '';
-                            var count_tags = 0;
                             var index;
-                            var flag = 1;
+                            var rw = [];
+                            var tag = [];
+
                             for (let i = 0; i < rows.length; i++) {
                                 qr = "SELECT id_tag, tag.label, COUNT(*) AS count \
                                                 FROM user_tag INNER JOIN tag on tag.id = user_tag.id_tag \
@@ -151,38 +151,41 @@ router.get('/', (req, res) =>  {
                                     if (error) {
                                         console.log(error);
                                     }
-                                    if (tags.length >= common_count && flag == 1) {
-                                        common_tags = tags;
-                                        count_tags = tags.length;
+                                    if (tags.length >= common_count) {
                                         index = i;
-                                        flag = 0;
-                                        row = rows[index];
+                                        rw[rw.length] = rows[index];
+                                        var id_row = rows[index].id;
+                                        var row_lnt = rw.length - 1;
+                                        var common_tags = tags;
                                         connection.query("SELECT label FROM tag \
                                             INNER JOIN user_tag \
                                             ON tag.id = user_tag.id_tag \
-                                            WHERE id_user = ?;", row.id, (error, user_tags) => {
-                                                if (error) {
+                                            WHERE id_user = ?;", id_row, (error, user_tags) => {
+                                                if (error) 
                                                     console.log(error);
-                                                } else {
-                                                    final_tags = '';
-                                                    for (let j = 0; j < user_tags.length; j++) {
-                                                        final_tags = final_tags.concat('#', user_tags[j].label, " ");
-                                                    }
-                                                    common_tagsfinal = '';
-                                                    for (let k = 0; k < common_tags.length; k++) {
-                                                        common_tagsfinal = common_tagsfinal.concat('#', common_tags[k].label, " ");
-                                                    }
+                                                var final_tags = '';
+                                                var common_tagsfinal = '';
+                                                for (let j = 0; j < user_tags.length; j++) {
+                                                    final_tags = final_tags.concat('#', user_tags[j].label, " ");
                                                 }
-                                                    res.render('match', { title: 'Match', row, sort, order, final_tags, common_tagsfinal, distance_range, age_0, age_1, common_count, fame});
+                                                for (let k = 0; k < common_tags.length; k++) {
+                                                    common_tagsfinal = common_tagsfinal.concat('#', common_tags[k].label, " ");
+                                                }
+                                                rw[row_lnt].tags = final_tags;
+                                                rw[row_lnt].common = common_tagsfinal;
+                                                console.log(i);
                                             });
                                     }
-                                    if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                        res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                                    if (i == rows.length - 1 && typeof(index) != 'undefined')
+                                        res.render('search', { title: 'Search', rw, sort, order, distance_range, age_0, age_1, common_count, fame});
+                                    else if (i == rows.length - 1 && typeof(index) == 'undefined')
+                                        res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+
                                 });
                             }
                         }
                     } else {
-                        res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                        res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
                     }
                 });
             }
@@ -203,7 +206,7 @@ router.post('/', (req, res) => {
         common_count = req.body.range_1;
         fame = req.body.range_2;
 
-        res.redirect('/match');
+        res.redirect('/search');
     }
     if (req.body.like) {
         connection.query("INSERT INTO matcha.like (liker, liked) VALUES(?, ?);", [connected.id, row.id], (error) => {
@@ -223,7 +226,7 @@ router.post('/', (req, res) => {
                 });
             }
         });
-        res.redirect('/match');
+        res.redirect('/search');
     }
     if (req.body.dislike) {
         connection.query("INSERT INTO matcha.dislike (disliker, disliked) VALUES(?, ?);", [connected.id, row.id], (error) => {
@@ -232,7 +235,7 @@ router.post('/', (req, res) => {
             } else {
             }
         });
-        res.redirect('/match');
+        res.redirect('/search');
     }
 });
 

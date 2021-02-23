@@ -42,27 +42,33 @@
                 <option value="Ascending">Ascending</option>
                 <option value="Descending">Descending</option>
             </select>
-            <br>
-            <br>
-            <br>
-            <% if (locals.row){ %>
-                <img style="height: 10vw;" src='<%= row.img0 %>'>
-                <h2 style="text-transform: capitalize;"><%= row.firstname %> <%= row.lastname %></h2>
-                <h4>Gender : <%= row.gender %></h4>
-                <h4>Sexuality : <%= row.preference %></h4>
-                <h5>Fame Rating : <%= row.rating %></h5>
-                <h5>Age : <%= row.age %></h5>
-                <h5>Tags : <%= final_tags %></h5>
-                <% if (locals.common_tagsfinal){ %>
-                    <h5 style="color: red;"><%= common_tagsfinal %></h5>
-                <% } %>
-                <h5>Bio : <%= row.bio %></h5>
-                <h5>Distance : <%= row.distance %> km</h5>
-                <input type="submit" name="like" id="like" value="like">
-                <input type="submit" name="dislike" id="dislike" value="dislike">
-            <% } %>
         </form>
     </div>
+            <% if (locals.rw){ %>
+                <% for (var i = 0; i < rw.length; i++) { %>
+                    <div class="form3">
+                        <form method="POST">
+                            <img style="height: 10vw;" src='<%= rw[i].img0 %>'>
+                            <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
+                            <h4>Gender : <%= rw[i].gender %></h4>
+                            <h4>Sexuality : <%= rw[i].preference %></h4>
+                            <h5>Fame Rating : <%= rw[i].rating %></h5>
+                            <h5>Age : <%= rw[i].age %></h5>
+                            <% if (locals.rw[i].tags){ %>
+                                <h5>Tags : <%= rw[i].tags %></h5>
+                            <% } %>
+                            <% if (locals.rw[i].common){ %>
+                                <h5 style="color: red;"><%= rw[i].common %></h5>
+                            <% } %>
+                            <h5>Bio : <%= rw[i].bio %></h5>
+                            <h5>Distance : <%= rw[i].distance.toFixed(2) %> km</h5>
+                            <input type="submit" name="like" id="like" value="like">
+                            <input type="submit" name="dislike" id="dislike" value="dislike">
+                        </form>
+                    </div>
+                <% } %>
+            <% } %>
+
 </body>
     <%- include('./partials/footer.ejs') %>
 </html>
