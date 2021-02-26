@@ -1,0 +1,28 @@
+<% if (typeof errors != 'undefined') { %>
+    <% errors.forEach( (error) => { %>
+        <div class="alert alert-danger alert-dismissible fade show"  id="err" role="alert">
+            <%= error.msg %>
+            <button type="button" onclick="hide()" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        <% }); %>
+<% } %>
+
+
+<style>
+    #err{
+        background-color: red;
+        outline:none;
+        border:none;
+        border:2px solid #0db8de;
+        border-radius: 10px;
+        color:azure;
+    };
+</style>
+<script>
+    const err = document.getElementById("err");
+    function hide(){
+        err.style.display = "none";
+    }
+</script>

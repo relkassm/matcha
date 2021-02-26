@@ -27,6 +27,10 @@
             <input type="range" id="range_2" name="range_2" min="0" max="10000" value="<%= fame %>" onchange="update_range2(this.value);">
             <br>
             <br>
+            <label>Search by tag</label>
+            <input type="text" name="tag" id="tag">
+            <br>
+            <br>
             <input type="submit" name="update" id="update">
             <br>
             <br>
@@ -57,13 +61,17 @@
                             <% if (locals.rw[i].tags){ %>
                                 <h5>Tags : <%= rw[i].tags %></h5>
                             <% } %>
+                            <% if (locals.rw[i].count){ %>
+                                <h5>Count : <%= rw[i].count %></h5>
+                            <% } %>
                             <% if (locals.rw[i].common){ %>
                                 <h5 style="color: red;"><%= rw[i].common %></h5>
                             <% } %>
                             <h5>Bio : <%= rw[i].bio %></h5>
                             <h5>Distance : <%= rw[i].distance.toFixed(2) %> km</h5>
+                            <input type="hidden" name="id" value="<%= rw[i].id %>">
                             <input type="submit" name="like" id="like" value="like">
-                            <input type="submit" name="dislike" id="dislike" value="dislike">
+                            <input type="submit" name="block" id="block" value="block">
                         </form>
                     </div>
                 <% } %>

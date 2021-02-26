@@ -22,22 +22,28 @@ docker exec -it mysql bash
 
 mysql -h 127.0.0.1 -u root -p
 
-mysql>
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'pass';
 
-	CREATE DATABASE matcha;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass';
+
+
+	mysql>
+
+CREATE DATABASE matcha;
 
 mysql --max_allowed_packet=100M -u root -p matcha
 
-mysql>
+	mysql>
 
-	set global net_buffer_length=1000000;
+set global net_buffer_length=1000000;
 
-	set global max_allowed_packet=1000000000;
+set global max_allowed_packet=1000000000;
 
 
-mysql> update user set lat=34.020882, lng=-6.841650 where username = 'wail';
-mysql> update user set lat=30.427755, lng=-9.598107 where username = 'reda';
-mysql> update user set lat=35.174427, lng=-6.147396 where username = 'oto';
+update user set lat=34.020882, lng=-6.841650 where username = 'wail';
+update user set lat=30.427755, lng=-9.598107 where username = 'reda';
+update user set lat=35.174427, lng=-6.147396 where username = 'oto';
+update user set lat=31.628674, lng=-7.992047where username = 'hliwa';
 
 
 
