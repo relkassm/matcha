@@ -1,18 +1,22 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
-const connection = mysql.createConnection({
+const connections = mysql.createPool({
    host: 'localhost',
    user: 'root',
    password: 'pass',
-   database: 'matcha'
+   database: 'matcha',
+   waitForConnections: true,
+   connectionLimit: 10,
+   queueLimit: 0
 })
-connection.connect();
+ const connection = connections.promise();
+
 
 connection.query('USE matcha;')
 connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
                   email VARCHAR(50) NOT NULL UNIQUE, \
-                  username VARCHAR(30) NOT NULL UNIQUE, \
+                  username VARCHAR(30) NOT NULL, \
                   firstname VARCHAR(30) NOT NULL, \
                   lastname VARCHAR(30) NOT NULL, \
                   password VARCHAR(255) NOT NULL, \
@@ -36,21 +40,21 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   });
 
 connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
-                  (liker INT(6) UNSIGNED NOT NULL, \
+                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
+                  liker INT(6) UNSIGNED NOT NULL, \
                   liked INT(6) UNSIGNED NOT NULL, \
                   FOREIGN KEY (liker) REFERENCES user(id), \
-                  FOREIGN KEY (liked) REFERENCES user(id),\
-                  PRIMARY KEY (liker, liked));", (error) => {
+                  FOREIGN KEY (liked) REFERENCES user(id));", (error) => {
                         if (error)
                             console.log(error);
                   });
 
-connection.query("CREATE TABLE IF NOT EXISTS matcha.block \
-                  (blocker INT(6) UNSIGNED NOT NULL, \
-                  blocked INT(6) UNSIGNED NOT NULL, \
-                  FOREIGN KEY (blocker) REFERENCES user(id), \
-                  FOREIGN KEY (blocked) REFERENCES user(id), \
-                  PRIMARY KEY (blocker, blocked));", (error) => {
+connection.query("CREATE TABLE IF NOT EXISTS matcha.dislike \
+                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
+                  disliker INT(6) UNSIGNED NOT NULL, \
+                  disliked INT(6) UNSIGNED NOT NULL, \
+                  FOREIGN KEY (disliker) REFERENCES user(id), \
+                  FOREIGN KEY (disliked) REFERENCES user(id));", (error) => {
                         if (error)
                             console.log(error);
                   });
@@ -72,6 +76,15 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user_tag \
                         if (error)
                             console.log(error);
                   });
+connection.query("CREATE TABLE IF NOT EXISTS matcha.block \
+                  (blocker INT(6) UNSIGNED NOT NULL, \
+                  blocked INT(6) UNSIGNED NOT NULL, \
+                  FOREIGN KEY (blocker) REFERENCES user(id), \
+                  FOREIGN KEY (blocked) REFERENCES user(id), \
+                  PRIMARY KEY (blocker, blocked));", (error) => {
+                        if (error)
+                            console.log(error);
+});
 
 connection.query("CREATE TABLE IF NOT EXISTS matcha.match \
                   (id_user0 INT(6) UNSIGNED, \

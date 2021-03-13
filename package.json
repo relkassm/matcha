@@ -10,8 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "alert": "^5.0.10",
+    "axios": "^0.21.1",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-flash-messages": "^0.1.1",
     "express-session": "^1.17.1",
     "geolib": "^3.3.1",
     "geolocation": "^0.2.0",
@@ -21,7 +23,8 @@
     "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
-    "node-navigator": "^1.0.1",
-    "util": "^0.12.3"
+    "mysql2": "^2.1.0",
+    "node-fetch": "^2.6.1",
+    "node-navigator": "^1.0.1"
   }
 }

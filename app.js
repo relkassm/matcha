@@ -3,6 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 const connection = require('./config/db');
+var flash = require('express-flash-messages')
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -13,7 +14,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
+app.use(flash())
 app.use((req, res, next) => {
     if (typeof(req.session.userid) == 'undefined') {
         req.session.userid = 0;
@@ -25,14 +26,12 @@ const login = require('./routes/login');
 const register = require('./routes/register');
 const profile = require('./routes/profile');
 const match = require('./routes/match');
-const search = require('./routes/search');
 const logout = require('./routes/logout');
 
 app.use('/login', login);
 app.use('/register', register);
 app.use('/profile', profile);
 app.use('/match', match);
-app.use('/search', search);
 app.use('/logout', logout);
 
 app.listen(1337);

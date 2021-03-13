@@ -3,71 +3,162 @@
     <%- include('./partials/head.ejs') %>
 <body>
     <%- include('./partials/nav.ejs') %>
-    <div class="form2">
-        <h2 style="text-transform: capitalize;"><%= row.username %>'s Profile</h2>
-        <form action="/profile" method="POST">
-            <img id="pic0" class="dp" src="<%= row.img0 %>">
-            <h4 class="labels">Email</h4>
-            <input class="inputs2" value="<%= row.email %>" type="text" id="email" name="email" required>
-            <h4 class="labels">Username</h4>
-            <input class="inputs2" value="<%= row.username %>" type="text" id="username" name="username" required>
-            <h4 class="labels">Last Name</h4>
-            <input class="inputs2" value="<%= row.lastname %>" type="text" id="lastname" name="lastname" required>
-            <h4 class="labels">First Name</h4>
-            <input class="inputs2" value="<%= row.firstname %>" type="text" id="firstname" name="firstname" required>
-            <h4 class="labels">Age</h4>
-            <input class="inputs2" value="<%= row.age %>" type="number" id="age" name="age"  min="18" max="75" required>
-            <h4 class="labels">Password</h4>
-            <input class="inputs2" value="<%= row.password %>" type="password" id="password" name="password" required>
-            <h4 class="labels">Gender</h4>
-            <select class="inputs2" id="gender" name="gender">
-                <option value="<%= row.gender %>">Select a gender (<%= row.gender %>)</option>
-                <option value="Man">Man</option>
-                <option value="Woman">Woman</option>
-            </select>
-            <h4 class="labels">Sexual Preferences</h4>
-            <select class="inputs2" id="preference" name="preference">
-                <option value="<%= row.preference %>">Select a sexuality (<%= row.preference %>)</option>
-                <option value="Bisexual">Bisexual</option>
-                <option value="Heterosexual">Heterosexual</option>
-                <option value="Homosexual">Homosexual</option>
-            </select>
-            <h4 class="labels">Interests</h4>
-            <h6 id="tags" class="tags"><%= tags %></h6>
-            <input type="text" name="tag" class="" id="tag">
-            <input type="submit" name="add_tag" class="" id="add_tag" value="+">
-            <input type="submit" name="remove_tag" class="" id="remove_tag" value="-">
-            <input type="submit" name="reset_tag" class="" id="reset_tag" value="x">
-            <h4 class="labels">Bio</h4>
-            <textarea class="tarea" id="bio" name="bio"><%= row.bio %></textarea>
-            <input type="submit" name="update" class="submit" value="Update" id="update">
-            <div class="images">
-                <img id="pic1" class="imgs" src="<%= row.img1 %>">
-                <img id="pic2" class="imgs" src="<%= row.img2 %>">
-                <img id="pic3" class="imgs" src="<%= row.img3 %>">
-                <img id="pic4" class="imgs" src="<%= row.img4 %>">
-                <!-- <input type="submit" name="del1" value="x"> -->
-                <!-- <input type="submit" name="del2" value="x"> -->
-                <!-- <input type="submit" name="del3" value="x"> -->
-                <!-- <input type="submit" name="del4" value="x"> -->
+<div class="container">
+  <div class="main-body">
+            <form action="/profile" method="POST">
+              <%- include('./partials/ErrorMsg') %>
+              <div class="col-md-12 mb-3">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex flex-column align-items-center text-center">
+                      <div class="mt-3">
+                          <h2 style="text-transform: capitalize;"><%= row.username %>'s Profile</h2>
+                          <img id="pic0" class="dp" src="<%= row.img0 %>">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        <div class="col-md-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input class="inputs2" value="<%= row.email %>" type="text" id="email" name="email" required>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Username</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input class="inputs2" value="<%= row.username %>" type="text" id="username" name="username" required>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Lastname</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input class="inputs2" value="<%= row.lastname %>" type="text" id="lastname" name="lastname" required>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">FirstName</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input class="inputs2" value="<%= row.firstname%>" type="firstname" id="firstname" name="firstname" required>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Age</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input class="inputs2" value="<%= row.age %>" type="number" id="age" name="age"  min="18" max="75" required>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Password</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <input class="inputs2" value="<%= row.password %>" type="password" id="password" name="password" required>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Gender</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <select class="inputs2" id="gender" name="gender">
+                    <option value="<%= row.gender %>">Select a gender (<%= row.gender %>)</option>
+                    <option value="Man">Man</option>
+                    <option value="Woman">Woman</option>
+                </select>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Sexual Preference</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <select class="inputs2" id="preference" name="preference">
+                    <option value="<%= row.preference %>">Select a sexuality (<%= row.preference %>)</option>
+                    <option value="Bisexual">Bisexual</option>
+                    <option value="Heterosexual">Heterosexual</option>
+                    <option value="Homosexual">Homosexual</option>
+                  </select>
+                </div>
             </div>
-            <canvas id="can0" hidden></canvas>
-            <canvas id="can1" hidden></canvas>
-            <canvas id="can2" hidden></canvas>
-            <canvas id="can3" hidden></canvas>
-            <canvas id="can4" hidden></canvas>
-            <input type="hidden" value="<%= row.img0 %>" id="img0" name="img0">
-            <input type="hidden" value="<%= row.img1 %>" id="img1" name="img1">
-            <input type="hidden" value="<%= row.img2 %>" id="img2" name="img2">
-            <input type="hidden" value="<%= row.img3 %>" id="img3" name="img3">
-            <input type="hidden" value="<%= row.img4 %>" id="img4" name="img4">
-            <input type="file" id="f0" hidden>           
-            <input type="file" id="f1" hidden>
-            <input type="file" id="f2" hidden>
-            <input type="file" id="f3" hidden>
-            <input type="file" id="f4" hidden>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 mb-3">
+          <div class="card h-100">
+            <div class="card-body">
+              <small>Intrests</small>
+              <div style="height: 20px">
+                <input type="text" name="tag" class="tags1" id="tag">
+                <input type="submit" name="add_tag" class="tags1" id="add_tag" value="+">
+                <input type="submit" name="remove_tag" class="tags1" id="remove_tag" value="-">
+                <input type="submit" name="reset_tag" class="tags1" id="reset_tag" value="x">
+              </div>
+              <hr>
+              <div>
+                <h6 id="tags" class="tags2"><%= tags %></h6>
+              </div>
+              <hr>
+              <div>
+                <h4 class="labels">Bio</h4>
+                <textarea class="tarea" id="bio" name="bio"><%= row.bio %></textarea>
+                <input type="submit" name="update"  class="submit" value="Update" id="update">
+              </div>
+              <hr>
+              <div>
+                <div class="images">
+                  <img id="pic1" class="imgs" src="<%= row.img1 %>">
+                  <img id="pic2" class="imgs" src="<%= row.img2 %>">
+                  <img id="pic3" class="imgs" src="<%= row.img3 %>">
+                  <img id="pic4" class="imgs" src="<%= row.img4 %>">
+                  <!-- <input type="submit" name="del1" value="x"> -->
+                  <!-- <input type="submit" name="del2" value="x"> -->
+                  <!-- <input type="submit" name="del3" value="x"> -->
+                <!-- <input type="submit" name="del4" value="x"> -->
+              </div>
+                <canvas id="can0" hidden></canvas>
+                <canvas id="can1" hidden></canvas>
+                <canvas id="can2" hidden></canvas>
+                <canvas id="can3" hidden></canvas>
+                <canvas id="can4" hidden></canvas>
+                <input type="hidden" value="<%= row.img0 %>" id="img0" name="img0">
+                <input type="hidden" value="<%= row.img1 %>" id="img1" name="img1">
+                <input type="hidden" value="<%= row.img2 %>" id="img2" name="img2">
+                <input type="hidden" value="<%= row.img3 %>" id="img3" name="img3">
+                <input type="hidden" value="<%= row.img4 %>" id="img4" name="img4">
+                <input type="file" id="f0" hidden>           
+                <input type="file" id="f1" hidden>
+                <input type="file" id="f2" hidden>
+                <input type="file" id="f3" hidden>
+                <input type="file" id="f4" hidden>
+              </div>
+            </div>
+          </div>
+        </div>
         </form>
     </div>
+</div>
 </body>
     <%- include('./partials/footer.ejs') %>
 </html>

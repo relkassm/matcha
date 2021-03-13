@@ -22,22 +22,17 @@ docker exec -it mysql bash
 
 mysql -h 127.0.0.1 -u root -p
 
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'pass';
+mysql>
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'pass';
-
-
-	mysql>
-
-CREATE DATABASE matcha;
+	CREATE DATABASE matcha;
 
 mysql --max_allowed_packet=100M -u root -p matcha
 
-	mysql>
+mysql>
 
-set global net_buffer_length=1000000;
+	set global net_buffer_length=1000000;
 
-set global max_allowed_packet=1000000000;
+	set global max_allowed_packet=1000000000;
 
 
 update user set lat=34.020882, lng=-6.841650 where username = 'wail';
@@ -48,9 +43,7 @@ update user set lat=31.628674, lng=-7.992047where username = 'hliwa';
 
 
 
+brew install mysql
+mysql.server start
+mysql -h 127.0.0.1 -u root -p
 
-
-IMPORTING DATABASE
-
-mysqldump matcha > backup-file.sql
-docker cp #id-container#:/backup-file.sql /Users/relkassm/Desktop/

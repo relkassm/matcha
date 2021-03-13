@@ -1,14 +1,13 @@
 <% if (typeof errors != 'undefined') { %>
     <% errors.forEach( (error) => { %>
-        <div class="alert alert-danger alert-dismissible fade show"  id="err" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show"  id = "err"role="alert">
             <%= error.msg %>
-            <button type="button" onclick="hide()" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
             </button>
           </div>
         <% }); %>
 <% } %>
-
 
 <style>
     #err{
@@ -20,9 +19,3 @@
         color:azure;
     };
 </style>
-<script>
-    const err = document.getElementById("err");
-    function hide(){
-        err.style.display = "none";
-    }
-</script>
