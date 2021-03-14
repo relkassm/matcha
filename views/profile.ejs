@@ -101,7 +101,17 @@
                     <option value="Homosexual">Homosexual</option>
                   </select>
                 </div>
-            </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Bio</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <textarea class="inputs2" id="bio" name="bio"><%= row.bio %></textarea>
+                </div>
+                <input type="submit" name="update"  class="submit" value="Update" id="update">
+              </div>
             </div>
           </div>
         </div>
@@ -118,12 +128,6 @@
               <hr>
               <div>
                 <h6 id="tags" class="tags2"><%= tags %></h6>
-              </div>
-              <hr>
-              <div>
-                <h4 class="labels">Bio</h4>
-                <textarea class="tarea" id="bio" name="bio"><%= row.bio %></textarea>
-                <input type="submit" name="update"  class="submit" value="Update" id="update">
               </div>
               <hr>
               <div>

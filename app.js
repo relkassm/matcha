@@ -26,12 +26,14 @@ const login = require('./routes/login');
 const register = require('./routes/register');
 const profile = require('./routes/profile');
 const match = require('./routes/match');
+const search = require('./routes/search');
 const logout = require('./routes/logout');
 
 app.use('/login', login);
 app.use('/register', register);
 app.use('/profile', profile);
 app.use('/match', match);
+app.use('/search', search);
 app.use('/logout', logout);
 
 app.listen(1337);

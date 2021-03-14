@@ -54,6 +54,12 @@
             <hr>
             <div class="row">
                 <div class="col-sm-3">
+                <input type="submit" name="update" id="update">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
                 <h6 class="mb-0">Sort</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
@@ -77,12 +83,6 @@
                     <option value="Ascending">Ascending</option>
                     <option value="Descending">Descending</option>
                 </select>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-3">
-                <input type="submit" name="update" id="update">
                 </div>
             </div>
             </div>
@@ -221,24 +221,4 @@
     });
     if ($('#sort').find(':selected').text() == 'Sort by: Common Tags')
         $('#order').hide();
-    // if ($('#filter').find(':selected').text() == 'Filter by: Distance')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').hide();
-    // }
-    // if ($('#filter').find(':selected').text() == 'Filter by: Age')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').show();
-    // }
-    // if ($('#filter').find(':selected').text() == 'Filter by: Common Tags')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').hide();
-    // }
-    // if ($('#filter').find(':selected').text() == 'Filter by: Fame Rating')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').show();
-    // }
 </script>

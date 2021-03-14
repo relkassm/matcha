@@ -3,86 +3,183 @@
     <%- include('./partials/head.ejs') %>
 <body>
     <%- include('./partials/nav.ejs') %>
-    
-    <div class="form3">
+<div class=".btn">
+        <div class="col-sm-3 align-items-center">
+            <button class="filter" onclick="matecha()" >FILTERS</button>
+        </div>
+</div>
+<form method="POST" id="filter1">
+    <div class="col-md-12">
+        <div class="card mb-3">
+            <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                <h6 class="mb-0">Distance</h6>
+                <label id="range_txt"></label>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                <input type="range" id="range" name="range" min="0" max="500" value="<%= distance_range %>" onchange="update_range(this.value);">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <h6 class="mb-0">Age :</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                <input type="number" name="age_0" id="age_0" min="18" max="75" value="<%= age_0 %>">
+                <input type="number" name="age_1" id="age_1" min="18" max="75" value="<%= age_1 %>">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <h6 class="mb-0">Common Tags</h6>
+                <label id="range_txt1"></label>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                <input type="range" id="range_1" name="range_1" min="0" max="20" value="<%= common_count %>" onchange="update_range1(this.value);">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <h6 class="mb-0">Fame Score:</h6>
+                <label id="range_txt2"></label>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                <input type="range" id="range_2" name="range_2" min="0" max="10000" value="<%= fame %>" onchange="update_range2(this.value);">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <input type="submit" name="update" id="update">
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <h6 class="mb-0">Sort</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                <select id="sort" name="sort">
+                    <option value="<%= sort %>">Sort by: <%= sort %></option>
+                    <option value="Distance">Distance</option>
+                    <option value="Age">Age</option>
+                    <option value="Common Tags">Common Tags</option>
+                    <option value="Fame Rating">Fame Rating</option>
+                </select>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <h6 class="mb-0">Order</h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                <select id="order" name="order">
+                    <option value="<%= order %>">Order: <%= order %></option>
+                    <option value="Ascending">Ascending</option>
+                    <option value="Descending">Descending</option>
+                </select>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+</form>
+<% if (locals.rw){ %>
+    <% for (var i = 0; i < rw.length; i++) { %>
         <form method="POST">
-
-            <label>Distance :</label>
-            <label id="range_txt"></label>
-            <input type="range" id="range" name="range" min="0" max="500" value="<%= distance_range %>" onchange="update_range(this.value);">
-            <br>
-            <br>
-            <label>Age :</label>
-            <input type="number" name="age_0" id="age_0" min="18" max="75" value="<%= age_0 %>" style="width: 4vw;">
-            <input type="number" name="age_1" id="age_1" min="18" max="75" value="<%= age_1 %>" style="width: 4vw;">
-            <br>
-            <br>
-            <label>Common Tags :</label>
-            <label id="range_txt1"></label>
-            <input type="range" id="range_1" name="range_1" min="0" max="20" value="<%= common_count %>" onchange="update_range1(this.value);">
-            <br>
-            <br>
-            <label>Fame :</label>
-            <label id="range_txt2"></label>
-            <input type="range" id="range_2" name="range_2" min="0" max="10000" value="<%= fame %>" onchange="update_range2(this.value);">
-            <br>
-            <br>
-            <label>Search by tag</label>
-            <input type="text" name="tag" id="tag">
-            <br>
-            <br>
-            <input type="submit" name="update" id="update">
-            <br>
-            <br>
-            <select id="sort" name="sort">
-                <option value="<%= sort %>">Sort by: <%= sort %></option>
-                <option value="Distance">Distance</option>
-                <option value="Age">Age</option>
-                <option value="Common Tags">Common Tags</option>
-                <option value="Fame Rating">Fame Rating</option>
-            </select>
-            <select id="order" name="order">
-                <option value="<%= order %>">Order: <%= order %></option>
-                <option value="Ascending">Ascending</option>
-                <option value="Descending">Descending</option>
-            </select>
-        </form>
-    </div>
-            <% if (locals.rw){ %>
-                <% for (var i = 0; i < rw.length; i++) { %>
-                    <div class="form3">
-                        <form method="POST">
-                            <img style="height: 10vw;" src='<%= rw[i].img0 %>'>
-                            <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
-                            <h4>Gender : <%= rw[i].gender %></h4>
-                            <h4>Sexuality : <%= rw[i].preference %></h4>
-                            <h5>Fame Rating : <%= rw[i].rating %></h5>
-                            <h5>Age : <%= rw[i].age %></h5>
-                            <% if (locals.rw[i].tags){ %>
-                                <h5>Tags : <%= rw[i].tags %></h5>
-                            <% } %>
-                            <% if (locals.rw[i].count){ %>
-                                <h5>Count : <%= rw[i].count %></h5>
-                            <% } %>
-                            <% if (locals.rw[i].common){ %>
-                                <h5 style="color: red;"><%= rw[i].common %></h5>
-                            <% } %>
-                            <h5>Bio : <%= rw[i].bio %></h5>
-                            <h5>Distance : <%= rw[i].distance.toFixed(2) %> km</h5>
-                            <input type="hidden" name="id" value="<%= rw[i].id %>">
-                            <input type="submit" name="like" id="like" value="like">
-                            <input type="submit" name="block" id="block" value="block">
-                        </form>
+                <div class="container2">
+                    <div class="iconic">
+                        <img class ="image1" style="height: 200px; width: 200px;" src='<%= rw[i].img0 %>' >
+                        <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
                     </div>
-                <% } %>
-            <% } %>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <h4>Gender : <%= rw[i].gender %></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <h4>Sexuality : <%= rw[i].preference %></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <h5>Fame Rating : <%= rw[i].rating %></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <h5>Age : <%= rw[i].age %></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <% if (locals.rw[i].tags){ %>
+                                    <h5>Tags : <%= rw[i].tags %></h5>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item2">
+                            <div class="item-area">
+                                <% if (locals.rw[i].count){ %>
+                                    <h5>Count : <%= rw[i].count %></h5>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item2">
+                            <div class="item-area">
+                                <% if (locals.rw[i].common){ %>
+                                    <h5 style="color: red;"><%= rw[i].common %></h5>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <h5>Bio : <%= rw[i].bio %></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item2">
+                            <div class="item-area">
+                                <h5>Distance : <%= rw[i].distance.toFixed(2) %> km</h5>
+                                <input type="hidden"  name="id" value="<%= rw[i].id %>">
+                                <input type="submit" class="button3" name="like" id="like" value="like">
+                                <input type="submit" class="button3" name="block" id="block" value="block">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    <% } %>
+<% } %>
 
 </body>
     <%- include('./partials/footer.ejs') %>
 </html>
 
 <script>
-
+    
     var range = document.getElementById('range');
     var range_txt = document.getElementById('range_txt');
     var range1 = document.getElementById('range_1');
@@ -92,6 +189,14 @@
 
     range_txt.innerHTML = range.value.concat(' km');
 
+    function matecha() {
+        var x = document.getElementById("filter1");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
+        }
+    }
     function update_range(val) {
       range_txt.innerHTML=val.concat(' km');
     }
@@ -116,24 +221,4 @@
     });
     if ($('#sort').find(':selected').text() == 'Sort by: Common Tags')
         $('#order').hide();
-    // if ($('#filter').find(':selected').text() == 'Filter by: Distance')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').hide();
-    // }
-    // if ($('#filter').find(':selected').text() == 'Filter by: Age')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').show();
-    // }
-    // if ($('#filter').find(':selected').text() == 'Filter by: Common Tags')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').hide();
-    // }
-    // if ($('#filter').find(':selected').text() == 'Filter by: Fame Rating')
-    // {
-    //     $('#val0').show();
-    //     $('#val1').show();
-    // }
 </script>
