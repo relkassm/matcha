@@ -35,15 +35,13 @@ mysql>
 	set global max_allowed_packet=1000000000;
 
 
-update user set lat=34.020882, lng=-6.841650 where username = 'wail';
-update user set lat=30.427755, lng=-9.598107 where username = 'reda';
-update user set lat=35.174427, lng=-6.147396 where username = 'oto';
-update user set lat=31.628674, lng=-7.992047where username = 'hliwa';
 
 
 
 
-brew install mysql
-mysql.server start
-mysql -h 127.0.0.1 -u root -p
 
+
+IMPORTING DATABASE
+
+mysqldump matcha > backup-file.sql
+docker cp #id-container#:/backup-file.sql /Users/relkassm/Desktop/

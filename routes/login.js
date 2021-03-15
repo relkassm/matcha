@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const connection = require('../config/db')
+const bcrypt = require('bcryptjs');
 
 router.get('/', (req, res) => {
     if (req.session.userid == 0)
@@ -10,45 +11,77 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const qr = "SELECT * FROM user";
+    const qr = "SELECT * FROM user where username = ?";
     const username = req.body.username;
     const password = req.body.password;
     const errors = [];
-    var found = 0;
-     connection.query(qr,  (error, rows) => {
-        if (error) {
-            console.log(error);
-        } else {
-            if (!username || !password)
-                errors.push({ msg: 'Please fill in all fields' });
-            rows.forEach(row => {
-                if (req.body.username == row.username && req.body.password == row.password){
-                    found = 1;
-                    req.session.userid = row.id;
-                    const qrr = "UPDATE user SET online=1 WHERE id=".concat(req.session.userid, ";");
-                     connection.query(qrr,  (error) => {
-                        if (error) {
-                            console.log(error);
-                        }
-                        else
-                        {
-                            res.redirect('profile');
-                        }
-                    });
-                }
-            });
+    if (!username || !password)
+        errors.push({ msg: 'Please fill in all fields' });
+    const [user] = await connection.execute(qr,[req.body.username]);
+    if (user.length){
+        const passwrd  = await bcrypt.compare(req.body.password,user[0].password);
+        if (passwrd){
+            if(user[0].confirmed == 1){
+                req.session.userid = user[0].id;
+                const qrr = "UPDATE user SET online=1 WHERE id=?";
+                const [up] = await connection.execute(qrr,[req.session.userid]);
+                res.redirect('profile');
             }
-            if(found === 0){
-                errors.push({ msg: 'Username or Password Incorrect' });
+            else{
+                errors.push({ msg: ' Account Not verified' });
+                if (errors.length > 0) {
+                            res.render('login.ejs', {
+                                errors,
+                                username,
+                                password
+                            });
+            }
+        }
+    } 
+        else{ 
+            errors.push({ msg: 'Username or Password Incorrect' });
             if (errors.length > 0) {
-                      res.render('login.ejs', {
+                        res.render('login.ejs', {
                             errors,
                             username,
                             password
                         });
-                    }
+                }
+        }
+    /* for (let i = 0; i < rows.length; i++) {
+            const passwrd  = await bcrypt.compare(req.body.password,row.password);
+            console.log(passwrd);
+            if (req.body.username == row.username && passwrd == true){
+                found = 1;
+                req.session.userid = row.id;
+                const qrr = "UPDATE user SET online=1 WHERE id=?";
+                const [up] = await connection.execute(qrr,[req.session.userid]);
+                console.log(up);
+                res.redirect('profile');
+            }   
+        }*/
+        /*rows.for(row => {
+            const passwrd  = await bcrypt.compare(req.body.password,row.password);
+            console.log(passwrd);
+            if (req.body.username == row.username && passwrd == true){
+                found = 1;
+                req.session.userid = row.id;
+                const qrr = "UPDATE user SET online=1 WHERE id=?";
+                const [up] = await connection.execute(qrr,[req.session.userid]);
+                console.log(up);
+                res.redirect('profile');
             }
-    });
-
+        });*/
+    }
+    else {
+        errors.push({ msg: 'Username or Password Incorrect' });
+        if (errors.length > 0) {
+                    res.render('login.ejs', {
+                        errors,
+                        username,
+                        password
+                    });
+             }
+    }
 });
 module.exports = router

@@ -263,9 +263,10 @@ body{
 
 .container2{
     position: relative;
-    width: 30%;
+    height:530px;
+    width: 350px;
     top:50%;
-    left:35%;
+    left:50%;
     box-shadow: -3px 4px 3px rgba(0,0,0,0.5);
 }
 

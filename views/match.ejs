@@ -54,12 +54,6 @@
             <hr>
             <div class="row">
                 <div class="col-sm-3">
-                <input type="submit" name="update" id="update">
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-3">
                 <h6 class="mb-0">Sort</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
@@ -85,6 +79,12 @@
                 </select>
                 </div>
             </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                <input type="submit" name="update" id="update">
+                </div>
+            </div>
             </div>
         </div>
         </div>
@@ -94,7 +94,7 @@
         <form method="POST">
                 <div class="container2">
                     <div class="iconic">
-                        <img class ="image1" style="height: 200px; width: 200px;" src='<%= rw[i].img0 %>' >
+                        <img class ="image1"  src='<%= rw[i].img0 %>'>
                         <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
                     </div>
                     <div class="menu-item">
@@ -221,4 +221,24 @@
     });
     if ($('#sort').find(':selected').text() == 'Sort by: Common Tags')
         $('#order').hide();
+    // if ($('#filter').find(':selected').text() == 'Filter by: Distance')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').hide();
+    // }
+    // if ($('#filter').find(':selected').text() == 'Filter by: Age')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').show();
+    // }
+    // if ($('#filter').find(':selected').text() == 'Filter by: Common Tags')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').hide();
+    // }
+    // if ($('#filter').find(':selected').text() == 'Filter by: Fame Rating')
+    // {
+    //     $('#val0').show();
+    //     $('#val1').show();
+    // }
 </script>

@@ -3,9 +3,13 @@ const router = express.Router()
 const connection = require('../config/db')
 const val = require('./helpers/checker')
 const Validator = require('./helpers/validator')
+const mailer = require('./helpers/Mailer')
+const bcrypt = require('bcryptjs');
+const { filter } = require('mysql2/lib/constants/charset_encodings')
 
 
 router.get('/', (req, res) => {
+    //mailer.mailer("haitam.dardari@gmail.com","iuzaheuiazhe","working");
     if (req.session.userid == 0)
         res.render('register', { title: 'Sign Up' });
     else
@@ -62,16 +66,17 @@ router.post('/', async (req, res) => {
         });
     }
     else{
-        const qr = "INSERT INTO user (email, username, lastname, firstname, password, online) VALUES ('".concat(req.body.email, "','", req.body.username, "','", req.body.lastname, "','", req.body.firstname, "','", req.body.password, "', 0);");
-        connection.query(qr, (error) => {
-            if (error) {
-                console.log(error);
-            } else {
-                //pass confirmation
-                //mail confirm function
-                res.redirect('/login');
-            }
-        });
+        const salt = bcrypt.genSaltSync(10);
+        const token = bcrypt.hashSync(email, salt);
+        const pass = bcrypt.hashSync(password, salt);
+        const qr = "INSERT INTO user (email, username, lastname, firstname, password, token, online) VALUES( ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            const [inser] = await connection.execute(qr,[email,username,lastname,firstname,pass,token,0]);
+            await mailer.mailer(email, 'validate your account <a target="_blank" href="http://localhost:1337/validate?token='+token+'&email='+email+'">validate</a>', "matcha");
+        } catch (error) {
+            console.log(error);   
+        }
+        res.redirect('/login')
     }
 });
 

@@ -28,6 +28,9 @@ const profile = require('./routes/profile');
 const match = require('./routes/match');
 const search = require('./routes/search');
 const logout = require('./routes/logout');
+const validate = require('./routes/validate');
+const update_pass = require('./routes/update_pass');
+const forgot_pass = require('./routes/forgot_pass');
 
 app.use('/login', login);
 app.use('/register', register);
@@ -35,6 +38,9 @@ app.use('/profile', profile);
 app.use('/match', match);
 app.use('/search', search);
 app.use('/logout', logout);
+app.use('/validate',validate);
+app.use('/update_pass',update_pass);
+app.use('/forgot_pass',forgot_pass);
 
 app.listen(1337);
 

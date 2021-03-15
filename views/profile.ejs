@@ -42,7 +42,7 @@
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <h6 class="mb-0">Lastname</h6>
+                  <h6 class="mb-0">Last Name</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                   <input class="inputs2" value="<%= row.lastname %>" type="text" id="lastname" name="lastname" required>
@@ -51,7 +51,7 @@
               <hr>
               <div class="row">
                 <div class="col-sm-3">
-                  <h6 class="mb-0">FirstName</h6>
+                  <h6 class="mb-0">First Name</h6>
                 </div>
                 <div class="col-sm-9 text-secondary">
                   <input class="inputs2" value="<%= row.firstname%>" type="firstname" id="firstname" name="firstname" required>
@@ -64,15 +64,6 @@
                 </div>
                 <div class="col-sm-9 text-secondary">
                   <input class="inputs2" value="<%= row.age %>" type="number" id="age" name="age"  min="18" max="75" required>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Password</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  <input class="inputs2" value="<%= row.password %>" type="password" id="password" name="password" required>
                 </div>
               </div>
               <hr>
@@ -101,17 +92,21 @@
                     <option value="Homosexual">Homosexual</option>
                   </select>
                 </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Bio</h6>
               </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <h6 class="mb-0">Bio</h6>
-                </div>
-                <div class="col-sm-9 text-secondary">
-                  <textarea class="inputs2" id="bio" name="bio"><%= row.bio %></textarea>
-                </div>
-                <input type="submit" name="update"  class="submit" value="Update" id="update">
+              <div class="col-sm-9 text-secondary">
+                <textarea class="inputs2" id="bio" name="bio"><%= row.bio %></textarea>
               </div>
+            </div>
+            
+            </div>
+            <input type="submit" name="update"  class="submit" value="Update" id="update">
+            <div class="signup">
+              <a href="./update_pass">update password</a>
             </div>
           </div>
         </div>

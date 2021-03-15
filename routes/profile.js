@@ -20,7 +20,6 @@ if (req.session.userid != 0)
             connection.query("UPDATE user SET lat = ? , lng = ? WHERE id = ? ;", [pos.latitude, pos.longitude, req.session.userid], async(error) => {
                 if (error) {
                     axios.get('http://ipinfo.io/json').then(data=>{
-                        console.log(data);
                     });
                 }
             });    
@@ -50,13 +49,12 @@ router.post('/', async (req, res) => {
     const errors = [];
     const id = req.session.userid;
     var [row] = await connection.execute("SELECT * FROM user WHERE user.id = ?",[req.session.userid]);
-    var { firstname, lastname, username, email, password,age,gender,sexualPreference,bio,img0,img1,img2,img3,img4} = req.body;
+    var { firstname, lastname, username, email,age,gender,sexualPreference,bio,img0,img1,img2,img3,img4} = req.body;
     const [user_sess] = await connection.execute("SELECT username FROM user WHERE user.id = ?",[req.session.userid]);
     const [firstname_sess] = await connection.execute("SELECT firstname FROM user WHERE user.id = ?",[req.session.userid]);
     const [lastname_sess] = await connection.execute("SELECT lastname FROM user WHERE user.id = ?",[req.session.userid]);
-    const [password_sess] = await connection.execute("SELECT password FROM user WHERE user.id = ?",[req.session.userid]);
     const [email_sess] = await connection.execute("SELECT email FROM user WHERE user.id = ?",[req.session.userid]);
-    if (!firstname || !username || !lastname || !email || !password || !age){
+    if (!firstname || !username || !lastname || !email || !age){
         errors.push({ msg: 'Please fill in all fields' });
     }
     else{
@@ -96,24 +94,11 @@ router.post('/', async (req, res) => {
                 errors.push({ msg: 'Email already in use' });
             }
         }
-                    
-        if (!Validator.checkLength(password, 50) || password.length < 6)
-        {
-            errors.push({ msg: 'Password should be between 6 and 50 characters' });
-            if(password_sess[0])
-                password =   password_sess[0].password;
-        }
-
-        if (!Validator.checkPassword(password)){
-            errors.push({ msg: 'Password should be at least 1 character Uppercase 1 character special 1 digit' });
-            if(password_sess[0])
-                password =   password_sess[0].password;
-        }
     }
     if(errors.length > 0){
         res.render('profile.ejs',{
             'errors': errors,
-            'row': { firstname, lastname, username,password, email, age, bio, gender, sexualPreference, img0, img1, img2, img3, img4},
+            'row': { firstname, lastname, username, email, age, bio, gender, sexualPreference, img0, img1, img2, img3, img4},
             tags
         });
     }else{
@@ -123,7 +108,6 @@ router.post('/', async (req, res) => {
                                 lastname = ?, \
                                   firstname = ?, \
                                 age = ?, \
-                                password = ?, \
                                 gender = ?, \
                                 preference = ?, \
                                 bio = ?, \
@@ -138,7 +122,6 @@ router.post('/', async (req, res) => {
                                 req.body.lastname,
                                 req.body.firstname,
                                 req.body.age,
-                                req.body.password,
                                 req.body.gender,
                                 req.body.preference,
                                 req.body.bio,
@@ -160,12 +143,10 @@ router.post('/', async (req, res) => {
                     for (var i = 0; i < tags.length; i++) {          
                         if (req.body.tag == tags[i].label) {
                             flag = 1;
-                            const [test] = await connection.execute("SELECT * FROM user_tag WHERE id_user = ? AND id_tag = ? ;",[req.session.userid, tags[i].id]);
-                            console.log(test);
-                            if(!test.length){
+                            const [test]= await connection.execute("SELECT a.id_user FROM (SELECT id_user FROM user_tag  WHERE id_tag= ?) a WHERE  a.id_user  = ? ",[tags[i].id,req.session.userid]);
+                            if(!test)
                                 var [tags_m] = await connection.execute("INSERT INTO user_tag (id_user, id_tag, time) VALUES (?, (SELECT tag.id FROM tag WHERE tag.label = ? ), now());", [req.session.userid, req.body.tag]);
-                                break;
-                            }
+                            break;
                         }
                     }
                 if (flag == 0 && req.body.tag) {
