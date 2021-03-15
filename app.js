@@ -25,6 +25,7 @@ app.use((req, res, next) => {
 const login = require('./routes/login');
 const register = require('./routes/register');
 const profile = require('./routes/profile');
+const user = require('./routes/user');
 const match = require('./routes/match');
 const search = require('./routes/search');
 const logout = require('./routes/logout');
@@ -35,6 +36,7 @@ const forgot_pass = require('./routes/forgot_pass');
 app.use('/login', login);
 app.use('/register', register);
 app.use('/profile', profile);
+app.use('/user/:id', user);
 app.use('/match', match);
 app.use('/search', search);
 app.use('/logout', logout);

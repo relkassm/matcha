@@ -106,7 +106,7 @@ router.post('/', async (req, res) => {
             await connection.query("UPDATE user SET email = ?,\
                                 username = ?, \
                                 lastname = ?, \
-                                  firstname = ?, \
+                                firstname = ?, \
                                 age = ?, \
                                 gender = ?, \
                                 preference = ?, \
@@ -143,10 +143,11 @@ router.post('/', async (req, res) => {
                     for (var i = 0; i < tags.length; i++) {          
                         if (req.body.tag == tags[i].label) {
                             flag = 1;
-                            const [test]= await connection.execute("SELECT a.id_user FROM (SELECT id_user FROM user_tag  WHERE id_tag= ?) a WHERE  a.id_user  = ? ",[tags[i].id,req.session.userid]);
-                            if(!test)
+                            const [test] = await connection.execute("SELECT * FROM user_tag WHERE id_user = ? AND id_tag = ? ;",[req.session.userid, tags[i].id]);
+                            if(!test.length){
                                 var [tags_m] = await connection.execute("INSERT INTO user_tag (id_user, id_tag, time) VALUES (?, (SELECT tag.id FROM tag WHERE tag.label = ? ), now());", [req.session.userid, req.body.tag]);
-                            break;
+                                break;
+                            }
                         }
                     }
                 if (flag == 0 && req.body.tag) {

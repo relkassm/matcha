@@ -26,6 +26,11 @@ var row = [];
 var rw = [];
 var final_tags;
 
+var tag_search;
+var arr_tags = [];
+var removed_users = [];
+var new_rows = [];
+
 router.get('/',async (req, res) =>  {
     if (req.session.userid != 0)
     {
@@ -68,6 +73,12 @@ router.get('/',async (req, res) =>  {
             qr_order = '';
         }
 
+        if (tag_search) {
+            tag_search = tag_search.replace(/\s+/g, '');
+            arr_tags = tag_search.split(",");
+        } else
+            arr_tags = [];
+
         qr_distance = ' HAVING distance <= '.concat(distance_range);
 
         qr_age = ' AND age >= '.concat(age_0, ' AND age <= ', age_1);
@@ -83,6 +94,30 @@ router.get('/',async (req, res) =>  {
         WHERE blocker = ", connected.id, ") ", qr_gender, qr_age, qr_fame, qr_distance, qr_sort, qr_order, ";");
         var [rows] = await connection.execute(qr);
         if (rows.length) {
+            if (arr_tags.length && tag_search) {
+                removed_users = [];
+                new_rows = [];
+                for (var i = 0; i < rows.length; i++) {
+                    for (var j = 0; j < arr_tags.length; j++) {
+                        var[user] = await connection.execute('SELECT user_tag.* FROM user_tag INNER JOIN tag ON id_tag = id WHERE id_user = ? AND label = ? ;',[ rows[i].id, arr_tags[j] ]);
+                        if (!user.length) {
+                            if (removed_users.indexOf(rows[i].username) === -1)
+                                removed_users.push(rows[i].username);
+                        }
+                    }
+                }
+                rows.forEach(row => {
+                    if (!removed_users.includes(row.username)){
+                        console.log('lenght : ', new_rows.length);
+                        new_rows[new_rows.length] = row;
+                    }
+                });
+                rows = [];
+                if (new_rows.length)
+                    rows = new_rows;
+                else
+                    res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
+            }
                 if (sort == 'Common Tags') {
                     var index;
                     var rw = [];
@@ -130,12 +165,12 @@ router.get('/',async (req, res) =>  {
                                         }
                                     }
                                 }
-                                res.render('search', { title: 'Search', rw, sort, order, distance_range, age_0, age_1, common_count, fame});
+                                res.render('search', { title: 'Search', rw, sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
                             }
                             if (i == rows.length - 1 && typeof(index) != 'undefined')
                                 setTimeout(render0, 100);
                             if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
                     }
                 }
                 else {
@@ -175,16 +210,16 @@ router.get('/',async (req, res) =>  {
                             rw[row_lnt].common = common_tagsfinal;
                         }
                             function render0() {
-                                res.render('search', { title: 'Search', rw, sort, order, distance_range, age_0, age_1, common_count, fame});
+                                res.render('search', { title: 'Search', rw, sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
                             }
                             if (i == rows.length - 1 && typeof(index) != 'undefined')
                                 setTimeout(render0, 50);
                             if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
                     }
                 }
             } else {
-                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
             }
     }
     else
@@ -200,7 +235,7 @@ router.post('/', async (req, res) => {
         age_1 = req.body.age_1;
         common_count = req.body.range_1;
         fame = req.body.range_2;
-        console.log(fame)
+        tag_search = req.body.tag_search;
         res.redirect('/search');
     }
     if (req.body.like) {

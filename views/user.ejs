@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <%- include('./partials/head.ejs') %>
+<body>
+    <%- include('./partials/nav.ejs') %>
+<div class="container">
+  <div class="main-body">
+    <form action="/profile" method="POST">
+      <%- include('./partials/ErrorMsg') %>
+      <div class="col-md-12 mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center text-center">
+              <div class="mt-3">
+                  <h2 style="text-transform: capitalize;"><%= row.username %>'s Profile</h2>
+                  <img class="dp" src="<%= row.img0 %>" style="height: 300px;">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Last Name : <%= row.lastname %></h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">First Name : <%= row.firstname%></h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Age : <%= row.age %></h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Gender : <%= row.gender %></h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Sexual Preference : <%= row.preference %></h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Bio : <%= row.bio %></h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Intrests : <%= tags %></h6>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+</div>
+</body>
+    <%- include('./partials/footer.ejs') %>
+</html>
+
+
+<script>
+
+
+</script>
