@@ -94,8 +94,10 @@
         <form method="POST">
                 <div class="container2">
                     <div class="iconic">
-                        <img class ="image1"  src='<%= rw[i].img0 %>'>
-                        <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
+                        <a href="/user/<%=rw[i].id%>">
+                            <img class ="image1"  src='<%= rw[i].img0 %>'>
+                            <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
+                        </a>
                     </div>
                     <div class="menu-item">
                         <div class="item">

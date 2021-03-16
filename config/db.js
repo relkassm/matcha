@@ -31,6 +31,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   online INT(6) DEFAULT 0,\
                   active INT(6) DEFAULT 1,\
                   token VARCHAR(255),\
+                  update_token VARCHAR(255),\
                   last_con TIMESTAMP,\
                   img0 LONGTEXT, \
                   img1 LONGTEXT, \

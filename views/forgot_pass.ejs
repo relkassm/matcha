@@ -6,9 +6,9 @@
         <div class="card login-form">
             <div class="card-body">
                 <div class ="card-text">
-                    <h1 class="card title text-center">UPDATE PASS</h1>
-                    <%- include('./partials/ErrorMsg') %>
-                    <form action="/update_pass" method="POST">
+                    <h1 class="card title text-center">FORGOT PASS</h1>
+                    <form action="/forgot_pass" method="POST">
+                        <%- include('./partials/ErrorMsg') %>
                         <div class="form-group">
                             <input pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}" title="You need to set a valid email And less than 100 characters"  class="form-control form-control-sm" type="email" id="email" name="email" placeholder="Email" required>
                         </div>
