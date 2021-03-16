@@ -45,3 +45,10 @@ IMPORTING DATABASE
 
 mysqldump matcha > backup-file.sql
 docker cp #id-container#:/backup-file.sql /Users/relkassm/Desktop/
+
+
+update user set lat=30.427755, lng=-9.598107 where id = 2;
+update user set lat=35.174427, lng=-6.147396 where id = 3;
+update user set lat=31.628674, lng=-7.992047 where id = 4;
+update user set lat=34.020882, lng=-6.841650 where id = 5;
+update user set lat=40.730610, lng=-73.935242 where id = 6;

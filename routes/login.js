@@ -48,30 +48,6 @@ router.post('/', async (req, res) => {
                         });
                 }
         }
-    /* for (let i = 0; i < rows.length; i++) {
-            const passwrd  = await bcrypt.compare(req.body.password,row.password);
-            console.log(passwrd);
-            if (req.body.username == row.username && passwrd == true){
-                found = 1;
-                req.session.userid = row.id;
-                const qrr = "UPDATE user SET online=1 WHERE id=?";
-                const [up] = await connection.execute(qrr,[req.session.userid]);
-                console.log(up);
-                res.redirect('profile');
-            }   
-        }*/
-        /*rows.for(row => {
-            const passwrd  = await bcrypt.compare(req.body.password,row.password);
-            console.log(passwrd);
-            if (req.body.username == row.username && passwrd == true){
-                found = 1;
-                req.session.userid = row.id;
-                const qrr = "UPDATE user SET online=1 WHERE id=?";
-                const [up] = await connection.execute(qrr,[req.session.userid]);
-                console.log(up);
-                res.redirect('profile');
-            }
-        });*/
     }
     else {
         errors.push({ msg: 'Username or Password Incorrect' });

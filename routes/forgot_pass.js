@@ -10,14 +10,12 @@ const uniqid = require('uniqid');
 
 router.get('/', async (req, res) => {
 
-    console.log(req.session.userid);
     if (req.session.userid == 0){
             res.render('forgot_pass', { title: 'forgot pass' });
             res.end();
         }
     else
     {
-        console.log("test");
         res.redirect('/profile');
         res.end();
     }
@@ -38,7 +36,6 @@ router.post('/', async (req, res) => {
                 errors.push({ msg: 'You need to set a valid email And less than 100 characters' });
         else if(errors.length > 0)
         {
-            console.log("here");
             res.render('forgot_pass.ejs', {
                 errors,
                 email

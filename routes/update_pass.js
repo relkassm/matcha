@@ -42,7 +42,6 @@ router.post('/', async (req, res) => {
         const salt = bcrypt.genSaltSync(10);
         const pass = bcrypt.hashSync(password, salt);
         const[upd] = await connection.execute("UPDATE user SET password = ? WHERE user.id = ?",[pass,req.session.userid]);
-        console.log(req.session.userid);
         if(upd.affectedRows)
         {
             res.redirect('/profile');

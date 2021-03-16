@@ -16,7 +16,7 @@ var qr_order;
 var qr_distance;
 var qr_fame;
 
-var distance_range = 500;
+var distance_range = 20000;
 var age_0 = 18;
 var age_1 = 28;
 var common_count = 0;
@@ -108,7 +108,6 @@ router.get('/',async (req, res) =>  {
                 }
                 rows.forEach(row => {
                     if (!removed_users.includes(row.username)){
-                        console.log('lenght : ', new_rows.length);
                         new_rows[new_rows.length] = row;
                     }
                 });
@@ -170,7 +169,7 @@ router.get('/',async (req, res) =>  {
                             if (i == rows.length - 1 && typeof(index) != 'undefined')
                                 setTimeout(render0, 100);
                             if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
+                                res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
                     }
                 }
                 else {
@@ -215,11 +214,11 @@ router.get('/',async (req, res) =>  {
                             if (i == rows.length - 1 && typeof(index) != 'undefined')
                                 setTimeout(render0, 50);
                             if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
+                                res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
                     }
                 }
             } else {
-                res.render('search', { title: 'Search | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, tag_search});
+                res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
             }
     }
     else

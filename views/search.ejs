@@ -18,7 +18,7 @@
                 <label id="range_txt"></label>
                 </div>
                 <div class="col-sm-9 text-secondary">
-                <input type="range" id="range" name="range" min="0" max="500" value="<%= distance_range %>" onchange="update_range(this.value);">
+                <input type="range" id="range" name="range" min="0" max="20000" value="<%= distance_range %>" onchange="update_range(this.value);">
                 </div>
             </div>
             <hr>
@@ -103,8 +103,10 @@
         <form method="POST">
                 <div class="container2">
                     <div class="iconic">
-                        <img class ="image1"  src='<%= rw[i].img0 %>'>
-                        <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
+                        <a href="/user/<%=rw[i].id%>">
+                            <img class ="image1"  src='<%= rw[i].img0 %>'>
+                            <h2 style="text-transform: capitalize;"><%= rw[i].firstname %> <%= rw[i].lastname %></h2>
+                        </a>
                     </div>
                     <div class="menu-item">
                         <div class="item">

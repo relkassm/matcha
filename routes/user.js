@@ -18,7 +18,13 @@ if (req.session.userid != 0)
     {
         const id_param = req.params.id;
         if (id_param != req.session.userid) {
-            var [rows] = await connection.execute("SELECT * FROM user WHERE user.id = ?;", [id_param]);
+            var [rowss] = await  connection.execute("SELECT * FROM user WHERE id = ?;", [req.session.userid]);
+            connected = rowss[0];
+            var [rows] = await connection.execute("SELECT *, (SELECT ST_Distance_Sphere(point( ? , ? ), \
+                                                    point(user.lng, user.lat))/1000) as distance \
+                                                    FROM user WHERE user.id = ? \
+                                                    AND user.id NOT IN (SELECT blocked FROM matcha.block \
+                                                    WHERE blocker = ? );", [connected.lng, connected.lat, id_param, connected.id]);
             if(rows.length){
                 row = rows[0];
                 var [user_int]= await connection.execute("SELECT tag.label FROM tag INNER JOIN user_tag ON tag.id=user_tag.id_tag WHERE user_tag.id_user = ? ORDER BY time asc",[req.session.userid]);
@@ -33,7 +39,7 @@ if (req.session.userid != 0)
                 res.render('user', { title: 'User', row, tags, session});
             }
             else
-                res.render('404', { title: 'Error' });
+                res.redirect('/405');
         }
         else
             res.redirect('/profile');
