@@ -12,6 +12,7 @@
     "alert": "^5.0.10",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
+    "country-reverse-geocoding": "^0.2.2",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "express-flash-messages": "^0.1.1",
@@ -19,6 +20,7 @@
     "geolib": "^3.3.1",
     "geolocation": "^0.2.0",
     "geopoint": "^1.0.1",
+    "i18n-iso-countries": "^6.5.0",
     "js-alert": "^1.0.4",
     "lodash": "^4.17.20",
     "mongoose": "^5.11.15",
@@ -28,6 +30,7 @@
     "node-fetch": "^2.6.1",
     "node-navigator": "^1.0.1",
     "nodemailer": "^6.5.0",
-    "uniqid": "^5.3.0"
+    "uniqid": "^5.3.0",
+    "which-country": "^1.0.0"
   }
 }

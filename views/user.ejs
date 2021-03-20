@@ -69,9 +69,33 @@
             <hr>
             <div class="row">
               <div class="col-sm-5">
+                <h6 class="mb-0">Country : <%= row.country %> </h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-5">
+                <h6 class="mb-0">Fame : <%= row.rating %> </h6>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-5">
                 <h6 class="mb-1">Intrests : <%= tags %></h6>
               </div>
             </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-10">
+                <% if (row.online == 1) { %>
+                <h6 class="mb-0">Online</h6>
+                <% } else { %>
+                <h6 class="mb-0">Offline</h6>
+                <h6 class="mb-0">Last Connection : <%= row.last_con %> </h6>
+                <% } %>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

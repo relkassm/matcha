@@ -8,6 +8,9 @@ const { Navigator } = require("node-navigator");
 const navigator = new Navigator();
 const Validator = require('./helpers/Validator');
 const val = require("./helpers/checker")
+var fs = require('fs');
+var wc = require('which-country');
+var countries = require("i18n-iso-countries");
 global.temp = "";
 
 
@@ -16,29 +19,22 @@ global.temp = "";
 router.get('/', async (req, res) => {
 if (req.session.userid != 0)
     {
-        navigator.geolocation.getCurrentPosition(pos => {
-            connection.query("UPDATE user SET lat = ? , lng = ? WHERE id = ? ;", [pos.latitude, pos.longitude, req.session.userid], async(error) => {
-                if (error) {
-                    axios.get('http://ipinfo.io/json').then(data=>{
-                    });
-                }
-            });    
-        });
-     
         var [row] = await connection.execute("SELECT * FROM user WHERE user.id = ?",[req.session.userid]);    
-        if(row){
-            row = row[0];
-            var [user_int]= await connection.execute("SELECT tag.label FROM tag INNER JOIN user_tag ON tag.id=user_tag.id_tag WHERE user_tag.id_user = ? ORDER BY time asc",[req.session.userid]);
-            if(user_int && user_int.length !== undefined)
-            {
-                var tags = '';
-                for (var i = 0; i < user_int.length; i++) {
-                    tags = tags.concat('#', user_int[i].label, " ");
-                }
+        row = row[0];
+        var [user_int]= await connection.execute("SELECT tag.label FROM tag INNER JOIN user_tag ON tag.id=user_tag.id_tag WHERE user_tag.id_user = ? ORDER BY time asc",[req.session.userid]);
+        if (user_int && user_int.length !== undefined)
+        {
+            var tags = '';
+            for (var i = 0; i < user_int.length; i++) {
+                tags = tags.concat('#', user_int[i].label, " ");
             }
-            global.temp = tags;
-            res.render('profile', { title: 'Profile', row, tags, session});
-        }  
+        }
+        global.temp = tags;
+        if ( row.firstname && row.lastname && row.gender && row.preference && row.bio && row.age && row.country && row.img0 && tags)
+            var [active_1] = await connection.execute("UPDATE user SET active = 1 WHERE id = ? ;", [req.session.userid]);
+        else
+            var [active_0] = await connection.execute("UPDATE user SET active = 0 WHERE id = ? ;", [req.session.userid]);
+        res.render('profile', { title: 'Profile', row, tags, session});
     }
     else
         res.redirect('login');
@@ -51,6 +47,8 @@ router.post('/', async (req, res) => {
     var [row] = await connection.execute("SELECT * FROM user WHERE user.id = ?",[req.session.userid]);
     var { firstname, lastname, username, email,age,gender,sexualPreference,bio,img0,img1,img2,img3,img4} = req.body;
     const [user_sess] = await connection.execute("SELECT username FROM user WHERE user.id = ?",[req.session.userid]);
+    const [user_lat] = await connection.execute("SELECT lat FROM user WHERE user.id = ?",[req.session.userid]);
+    const [user_lng] = await connection.execute("SELECT lng FROM user WHERE user.id = ?",[req.session.userid]);
     const [firstname_sess] = await connection.execute("SELECT firstname FROM user WHERE user.id = ?",[req.session.userid]);
     const [lastname_sess] = await connection.execute("SELECT lastname FROM user WHERE user.id = ?",[req.session.userid]);
     const [email_sess] = await connection.execute("SELECT email FROM user WHERE user.id = ?",[req.session.userid]);
@@ -95,14 +93,32 @@ router.post('/', async (req, res) => {
             }
         }
     }
-    if(errors.length > 0){
+    if (errors.length > 0) {
         res.render('profile.ejs',{
             'errors': errors,
             'row': { firstname, lastname, username, email, age, bio, gender, sexualPreference, img0, img1, img2, img3, img4},
             tags
         });
-    }else{
-        if (req.body.update) {     
+    } else {
+        if (req.body.update) {
+            var lat = req.body.lat;
+            var lng = req.body.lng;
+            var loc;
+           if((!user_lat[0].lat || !user_lng[0].lng) && (lat == "" || lng == ""))
+            {
+                await axios.get('http://ipinfo.io/json').then(resp => {
+                    const arr = resp.data.loc.split(",");
+                     loc = {lat: parseFloat(arr[0]), lng: parseFloat(arr[1])}
+                })
+                lat = loc.lat;
+                lng = loc.lng;
+            }
+            else if (lat == "" || lng == "" || wc([lng, lat]) == null)
+            {
+                lat = user_lat[0].lat;
+                lng = user_lng[0].lng;
+            }
+            var country = countries.getName(wc([lng, lat]), "en", {select: "official"});
             await connection.query("UPDATE user SET email = ?,\
                                 username = ?, \
                                 lastname = ?, \
@@ -110,6 +126,9 @@ router.post('/', async (req, res) => {
                                 age = ?, \
                                 gender = ?, \
                                 preference = ?, \
+                                lat = ?,\
+                                lng = ?,\
+                                country = ?,\
                                 bio = ?, \
                                 img0 = ?, \
                                 img1 = ?, \
@@ -124,6 +143,9 @@ router.post('/', async (req, res) => {
                                 req.body.age,
                                 req.body.gender,
                                 req.body.preference,
+                                lat,
+                                lng,
+                                country,
                                 req.body.bio,
                                 req.body.img0,
                                 req.body.img1,

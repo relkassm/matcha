@@ -24,14 +24,14 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   preference VARCHAR(30) DEFAULT 'Bisexual', \
                   bio VARCHAR(255), \
                   age INT(6),\
+                  country VARCHAR(30), \
                   confirmed INT(6) DEFAULT 0,\
                   rating INT(6) DEFAULT 0,\
-                  lat DECIMAL(10, 8), \
-                  lng DECIMAL(11, 8), \
+                  lat DECIMAL(10, 8) ,\
+                  lng DECIMAL(11, 8) ,\
                   online INT(6) DEFAULT 0,\
                   active INT(6) DEFAULT 1,\
                   token VARCHAR(255),\
-                  update_token VARCHAR(255),\
                   last_con TIMESTAMP,\
                   img0 LONGTEXT, \
                   img1 LONGTEXT, \
@@ -85,6 +85,16 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.block \
                   FOREIGN KEY (blocker) REFERENCES user(id), \
                   FOREIGN KEY (blocked) REFERENCES user(id), \
                   PRIMARY KEY (blocker, blocked));", (error) => {
+                        if (error)
+                            console.log(error);
+});
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.report \
+                  (reporter INT(6) UNSIGNED NOT NULL, \
+                  reported INT(6) UNSIGNED NOT NULL, \
+                  FOREIGN KEY (reporter) REFERENCES user(id), \
+                  FOREIGN KEY (reported) REFERENCES user(id), \
+                  PRIMARY KEY (reporter, reported));", (error) => {
                         if (error)
                             console.log(error);
 });

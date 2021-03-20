@@ -127,37 +127,35 @@
                             </div>
                         </div>
                     </div>
+                <% if (locals.rw[i].tags){ %>
                     <div class="menu-item">
                         <div class="item">
                             <div class="item-area">
-                                <% if (locals.rw[i].tags){ %>
                                     <h5>Tags : <%= rw[i].tags %></h5>
-                                <% } %>
                             </div>
                         </div>
                     </div>
+                <% } %>
+                <% if (locals.rw[i].common){ %>
                     <div class="menu-item">
-                        <div class="item2">
+                        <div class="item">
                             <div class="item-area">
-                                <% if (locals.rw[i].count){ %>
-                                    <h5>Count : <%= rw[i].count %></h5>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="menu-item">
-                        <div class="item2">
-                            <div class="item-area">
-                                <% if (locals.rw[i].common){ %>
                                     <h5 style="color: red;"><%= rw[i].common %></h5>
-                                <% } %>
                             </div>
                         </div>
                     </div>
+                <% } %>
                     <div class="menu-item">
                         <div class="item">
                             <div class="item-area">
                                 <h5>Bio : <%= rw[i].bio %></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div class="item">
+                            <div class="item-area">
+                                <h5>Country : <%= rw[i].country %></h5>
                             </div>
                         </div>
                     </div>
@@ -168,6 +166,7 @@
                                 <input type="hidden"  name="id" value="<%= rw[i].id %>">
                                 <input type="submit" class="button3" name="like" id="like" value="like">
                                 <input type="submit" class="button3" name="block" id="block" value="block">
+                                <input type="submit" class="button3" name="report" id="report" value="report">
                             </div>
                         </div>
                     </div>
