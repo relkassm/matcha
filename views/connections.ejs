@@ -1,0 +1,89 @@
+<html>
+    <%- include('./partials/head.ejs') %>
+    
+<body>
+    <%- include('./partials/nav.ejs') %>
+<div class="container">
+  <div class="main-body">
+
+
+        <div class="col-md-12 mb-3">
+          <div class="card">
+            <div class="card-body">
+          <% if (locals.matches_0) { %>
+          <h3>My connections</h3>
+            <% for (var i = 0; i < matches_0.length; i++) { %>
+              <div class="row">
+                <a href="user/<%= matches_0[i].id %>">
+                  <img src="<%= matches_0[i].img0 %>" class="dp">
+                  <h5><%= matches_0[i].firstname %> - <%= matches_0[i].lastname %></h5>
+                  <% if (matches_0[i].online == 1) {%>
+                  <h5>Online</h5>
+                  <%}%>
+                </a>
+              </div>
+            <%}%>
+          <%}%>
+          <% if (locals.matches_1) { %>
+            <% for (var i = 0; i < matches_1.length; i++) { %>
+              <div class="row">
+                <a href="user/<%= matches_1[i].id %>">
+                  <img src="<%= matches_1[i].img0 %>" class="dp">
+                  <h5><%= matches_1[i].firstname %> - <%= matches_1[i].lastname %></h5>
+                  <% if (matches_1[i].online == 1) {%>
+                  <h5>Online</h5>
+                  <%}%>
+                </a>
+              </div>
+            <%}%>
+          <%}%>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <% if (locals.blocked) { %>
+          <div class="card">
+            <div class="card-body">
+              <h3>Blocked List</h3>
+              <% for (var i = 0; i < blocked.length; i++) { %>
+                <form method="POST">
+                  <div class="row">
+                      <h5><%= blocked[i].firstname %> - <%= blocked[i].lastname %></h5>
+                      <input type="hidden" name="id" value="<%= blocked[i].id %>">
+                      <input type="submit" class="button3" name="unblock" id="unblock" value="unblock">
+                  </div>
+                </form>
+              <%}%>
+            </div>
+          </div>
+          <%}%>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <% if (locals.liked) { %>
+          <div class="card">
+            <div class="card-body">
+              <h3>Liking List</h3>
+              <% for (var i = 0; i < liked.length; i++) { %>
+                <form method="POST">
+                  <div class="row">
+                      <h5><%= liked[i].firstname %> - <%= liked[i].lastname %></h5>
+                      <input type="hidden" name="id" value="<%= liked[i].id %>">
+                      <input type="submit" class="button3" name="unlike" id="unlike" value="unlike">
+                  </div>
+                </form>
+              <%}%>
+            </div>
+          </div>
+          <%}%>
+        </div>     
+
+    </div>
+</div>
+
+</body>
+    <%- include('./partials/footer.ejs') %>
+</html>
+
+  

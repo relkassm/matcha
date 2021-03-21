@@ -15,7 +15,6 @@ global.temp = "";
 
 
 
-
 router.get('/', async (req, res) => {
 if (req.session.userid != 0)
     {
@@ -34,6 +33,7 @@ if (req.session.userid != 0)
             var [active_1] = await connection.execute("UPDATE user SET active = 1 WHERE id = ? ;", [req.session.userid]);
         else
             var [active_0] = await connection.execute("UPDATE user SET active = 0 WHERE id = ? ;", [req.session.userid]);
+
         res.render('profile', { title: 'Profile', row, tags, session});
     }
     else
@@ -52,10 +52,10 @@ router.post('/', async (req, res) => {
     const [firstname_sess] = await connection.execute("SELECT firstname FROM user WHERE user.id = ?",[req.session.userid]);
     const [lastname_sess] = await connection.execute("SELECT lastname FROM user WHERE user.id = ?",[req.session.userid]);
     const [email_sess] = await connection.execute("SELECT email FROM user WHERE user.id = ?",[req.session.userid]);
-    if (!firstname || !username || !lastname || !email || !age){
+    if (!firstname || !username || !lastname || !email || !age) {
         errors.push({ msg: 'Please fill in all fields' });
     }
-    else{
+    else {
         if (!Validator.checkUsername(username)){
             errors.push({ msg: "Username should be between 6 And 30 And have only characters and _ - symbols" });
             username =  user_sess[0].username;
@@ -194,6 +194,7 @@ router.post('/', async (req, res) => {
                 }
             });
         }
+
         res.redirect('/profile');
     }
 });

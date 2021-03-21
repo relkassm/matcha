@@ -80,8 +80,9 @@ router.get('/',async (req, res) =>  {
             FROM user WHERE active = 1 AND user.id != ", connected.id, " \
             AND user.id NOT IN (SELECT liked FROM matcha.like \
             WHERE liker = ", connected.id, ") ", " \
-            AND user.id NOT IN (SELECT blocked FROM matcha.block \
-            WHERE blocker = ", connected.id, ") ", qr_gender, qr_age, qr_fame, qr_distance, qr_sort, qr_order, ";");
+            AND user.id NOT IN (SELECT blocked FROM matcha.block WHERE blocker = ", connected.id, ") \
+            AND user.id NOT IN (SELECT blocker FROM matcha.block WHERE blocked = ", connected.id, ") \
+            ", qr_gender, qr_age, qr_fame, qr_distance, qr_sort, qr_order, ";");
             var [rows] = await connection.execute(qr);
             if (rows.length) {
                     if (sort == 'Common Tags') {
@@ -204,26 +205,25 @@ router.post('/', async (req, res) => {
         age_1 = req.body.age_1;
         common_count = req.body.range_1;
         fame = req.body.range_2;
-        res.redirect('/match');
     }
     if (req.body.like) {
-        const [match1] = await  connection.execute("INSERT INTO matcha.like (liker, liked) VALUES(?, ?);", [connected.id, req.body.id]);
-        const [match2] = await connection.execute("UPDATE user SET rating = rating + 100 WHERE id = ? ;", [req.body.id]);
-        var [rowss] = await connection.execute("SELECT * FROM matcha.like WHERE liker = ? AND liked = ?;", [req.body.id, connected.id]);
-        if (rowss.length)
-            var [match3] = await connection.execute("INSERT INTO matcha.match (id_user0, id_user1, time) VALUES(?, ?, now());", [req.body.id, connected.id]);
-        res.redirect('/match');
+        const [like] = await  connection.execute("INSERT INTO matcha.like (liker, liked) VALUES(?, ?);", [connected.id, req.body.id]);
+        const [rate] = await connection.execute("UPDATE user SET rating = rating + 100 WHERE id = ? ;", [req.body.id]);
+        var [check_match] = await connection.execute("SELECT * FROM matcha.like WHERE liker = ? AND liked = ?;", [req.body.id, connected.id]);
+        if (check_match.length)
+            var [match] = await connection.execute("INSERT INTO matcha.match (id_user0, id_user1, time) VALUES(?, ?, now());", [req.body.id, connected.id]);
     }
     if (req.body.block) {
-        const[match4] = await connection.execute("INSERT INTO matcha.block (blocker, blocked) VALUES(?, ?);", [connected.id, req.body.id]);
-        res.redirect('/match');
+        var [block] = await connection.execute("INSERT INTO matcha.block (blocker, blocked) VALUES(?, ?);", [connected.id, req.body.id]);
     }
     if (req.body.report) {
-        const[report] = await connection.execute("SELECT * FROM matcha.report WHERE reporter = ? AND reported = ? ;", [connected.id, req.body.id]);
-        if (!report.length)
-            var[report2] = await connection.execute("INSERT INTO matcha.report (reporter, reported) VALUES(?, ?);", [connected.id, req.body.id]);
-        res.redirect('/match');
+        var [check_report] = await connection.execute("SELECT * FROM matcha.report WHERE reporter = ? AND reported = ? ;", [connected.id, req.body.id]);
+        if (!check_report.length) {
+            var [report] = await connection.execute("INSERT INTO matcha.report (reporter, reported) VALUES(?, ?);", [connected.id, req.body.id]);
+            var [unrate] = await connection.execute("UPDATE user SET rating = rating - 100 WHERE id = ? ;", [req.body.id]);
+        }
     }
+    res.redirect('/match');
 });
 
 module.exports = router

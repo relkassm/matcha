@@ -5,7 +5,7 @@
     <%- include('./partials/nav.ejs') %>
 <div class="container">
   <div class="main-body">
-    <form action="/profile" method="POST">
+    <form action="/user/<%= row.id %>" method="POST">
       <div class="col-md-12 mb-3">
         <div class="card">
           <div class="card-body">
@@ -95,13 +95,54 @@
                 <% } %>
               </div>
             </div>
-
+            <div class="row">
+              <div class="col-sm-5">
+                <input type="hidden"  name="id" value="<%= row.id %>">
+                <% if (is_liked == 1) { %>
+                  <input type="submit" class="button3" name="unlike" id="unlike" value="unlike">
+                <% } else { %>
+                  <input type="submit" class="button3" name="like" id="like" value="like">
+                <% } %>
+                <input type="submit" class="button3" name="block" id="block" value="block">
+                <input type="submit" class="button3" name="report" id="report" value="report">
+            </div>
+          </div>
           </div>
         </div>
       </div>
       </form>
+      <% if (is_match == 1) { %>
+      <form method="POST">
+        <div class="col-md-12">
+          <div class="card mb-3">
+            <div class="card-body">
+              <h3>Chat</h3>
+              <input type="hidden"  name="id" value="<%= row.id %>">
+              <textarea name="message"></textarea>
+              <input type="submit" name="send" value="Send" class="button3">
+              <div id="msgdiv" style="height: 500px; overflow: scroll;">
+                <% if (locals.messages) { %>
+                  <% for (var i = 0; i < messages.length; i++) { %>
+                    <% if (messages[i].messager == row.id) { %>
+                      <p style="background: pink; text-align: right;"><%= messages[i].message %></p>
+                    <% } else { %>
+                      <p style="background: aqua;"><%= messages[i].message %></p>
+                    <% } %>
+                  <% } %>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <% } %>
     </div>
 </div>
 </body>
     <%- include('./partials/footer.ejs') %>
 </html>
+
+<script>
+  var msgdiv = document.getElementById("msgdiv");
+  msgdiv.scrollTop = msgdiv.scrollHeight;
+</script>

@@ -22,7 +22,6 @@
             if (error) {
                 return false;
             } else {
-                console.log("HERE");
                 return true;
             }
         });

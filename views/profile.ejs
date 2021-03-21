@@ -5,22 +5,22 @@
     <%- include('./partials/nav.ejs') %>
 <div class="container">
   <div class="main-body">
-            <form action="/profile" method="POST">
-              <%- include('./partials/ErrorMsg') %>
-              <div class="col-md-12 mb-3">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="d-flex flex-column align-items-center text-center">
-                      <div class="mt-3">
-                          <h2 style="text-transform: capitalize;"><%= row.username %>'s Profile</h2>
-                          <img id="pic0" class="dp" src="<%= row.img0 %>">
-                      </div>
-                    </div>
-                  </div>
+    <form method="POST">
+        <%- include('./partials/ErrorMsg') %>
+        <div class="col-md-12 mb-3">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex flex-column align-items-center text-center">
+                <div class="mt-3">
+                    <h2 style="text-transform: capitalize;"><%= row.username %>'s Profile</h2>
+                    <img id="pic0" class="dp" src="<%= row.img0 %>">
                 </div>
               </div>
-        <div class="col-md-12">
-          <div class="card mb-3">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <div class="card">
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-3">
@@ -102,7 +102,11 @@
                 <textarea class="inputs2" id="bio" name="bio"><%= row.bio %></textarea>
               </div>
             </div>
-            
+            <div class="row">
+              <div class="col-sm-3">
+                <h6 class="mb-0">Fame rating: <%= row.rating %></h6>
+              </div>
+            </div>
             </div>
             <input type="submit" name="update"  class="submit" value="Update" id="update">
             <div class="signup">
@@ -130,8 +134,8 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-12 mb-3">
-          <div class="card h-100">
+        <div class="col-md-12 mb-3">
+          <div class="card">
             <div class="card-body">
               <small>Intrests</small>
               <div style="height: 20px">

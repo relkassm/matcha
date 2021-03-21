@@ -30,7 +30,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   lat DECIMAL(10, 8) ,\
                   lng DECIMAL(11, 8) ,\
                   online INT(6) DEFAULT 0,\
-                  active INT(6) DEFAULT 1,\
+                  active INT(6) DEFAULT 0,\
                   token VARCHAR(255),\
                   last_con TIMESTAMP,\
                   img0 LONGTEXT, \
@@ -43,8 +43,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   });
 
 connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
-                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
-                  liker INT(6) UNSIGNED NOT NULL, \
+                  (liker INT(6) UNSIGNED NOT NULL, \
                   liked INT(6) UNSIGNED NOT NULL, \
                   FOREIGN KEY (liker) REFERENCES user(id), \
                   FOREIGN KEY (liked) REFERENCES user(id));", (error) => {
@@ -53,8 +52,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
                   });
 
 connection.query("CREATE TABLE IF NOT EXISTS matcha.dislike \
-                  (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
-                  disliker INT(6) UNSIGNED NOT NULL, \
+                  (disliker INT(6) UNSIGNED NOT NULL, \
                   disliked INT(6) UNSIGNED NOT NULL, \
                   FOREIGN KEY (disliker) REFERENCES user(id), \
                   FOREIGN KEY (disliked) REFERENCES user(id));", (error) => {
@@ -109,5 +107,17 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.match \
                         if (error)
                             console.log(error);
                   });
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.message \
+                  (id_message INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
+                  messager INT(6) UNSIGNED NOT NULL, \
+                  messaged INT(6) UNSIGNED NOT NULL, \
+                  message VARCHAR(255),\
+                  time DATETIME,\
+                  FOREIGN KEY (messager) REFERENCES user(id), \
+                  FOREIGN KEY (messaged) REFERENCES user(id) );", (error) => {
+                        if (error)
+                            console.log(error);
+});
 
 module.exports = connection;
