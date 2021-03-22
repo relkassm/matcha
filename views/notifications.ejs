@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <%- include('./partials/head.ejs') %>
+<body>
+    <%- include('./partials/nav.ejs') %>
+<div class="container">
+  <div class="main-body">
+      <div class="col-md-12">
+        <div class="card mb-3">
+          <div class="card-body" style="text-transform: capitalize;">
+            <% if (locals.notif) { %>
+              <% for (var i = 0; i < notif.length; i++) { %>
+              <div style="border: solid grey 1px;">
+                <a href="user/<%= notif[i].id %>">
+                  <% if (notif[i].type == 1) { %>
+                    <p> <strong> <%= notif[i].firstname%> <%= notif[i].lastname%> </strong>likes you</p>
+                  <% } %>
+                  <% if (notif[i].type == 2) { %>
+                    <p>  <strong> <%= notif[i].firstname%> <%= notif[i].lastname%> </strong>visited your profile</p>
+                  <% } %>
+                  <% if (notif[i].type == 3) { %>
+                    <p>  <strong> <%= notif[i].firstname%> <%= notif[i].lastname%> </strong>sent you a message</p>
+                  <% } %>
+                  <% if (notif[i].type == 4) { %>
+                    <p>  <strong> <%= notif[i].firstname%> <%= notif[i].lastname%> </strong>liked you back</p>
+                  <% } %>
+                  <% if (notif[i].type == 5) { %>
+                    <p>  <strong> <%= notif[i].firstname%> <%= notif[i].lastname%> </strong>unliked you :(</p>
+                  <% } %>
+                  <p style="text-align: right;"> <%= notif[i].time%> </p>
+                </a>
+              </div>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</body>
+    <%- include('./partials/footer.ejs') %>
+</html>

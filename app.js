@@ -3,7 +3,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
 const connection = require('./config/db');
-var flash = require('express-flash-messages')
+const flash = require('express-flash-messages');
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
@@ -29,6 +29,7 @@ const user = require('./routes/user');
 const match = require('./routes/match');
 const search = require('./routes/search');
 const connections = require('./routes/connections');
+const notifications = require('./routes/notifications');
 const logout = require('./routes/logout');
 const validate = require('./routes/validate');
 const update_pass = require('./routes/update_pass');
@@ -41,6 +42,7 @@ app.use('/user/:id', user);
 app.use('/match', match);
 app.use('/search', search);
 app.use('/connections', connections);
+app.use('/notifications', notifications);
 app.use('/logout', logout);
 app.use('/validate',validate);
 app.use('/update_pass',update_pass);

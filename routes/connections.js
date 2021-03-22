@@ -34,13 +34,19 @@ router.post('/', async (req, res) => {
     if (req.body.unblock) {
         var [unblock] = await  connection.execute("DELETE FROM matcha.block WHERE blocker = ? AND blocked = ? ;", [req.session.userid, req.body.id]);
     }
-
+    
     if (req.body.unlike) {
-        var [unmatch_1] = await connection.execute("DELETE FROM matcha.match WHERE id_user0 = ? AND id_user1 = ? ;", [req.body.id, req.session.userid]);
-        var [unmatch_2] = await connection.execute("DELETE FROM matcha.match WHERE id_user1 = ? AND id_user0 = ? ;", [req.body.id, req.session.userid]);
-        var [unlike] = await  connection.execute("DELETE FROM matcha.like WHERE liker = ? AND liked = ? ;", [req.session.userid, req.body.id]);
-        var [unrate] = await connection.execute("UPDATE user SET rating = rating - 50 WHERE id = ? ;", [req.body.id]);
         
+        var [is_match3] = await connection.execute("SELECT * FROM matcha.match WHERE id_user0 = ? AND id_user1 = ? ;",[req.session.userid, req.body.id]);
+        var [is_match4] = await connection.execute("SELECT * FROM matcha.match WHERE id_user1 = ? AND id_user0 = ? ;",[req.session.userid, req.body.id]);
+        if (is_match3.length || is_match4.length){
+            var [unmatch_1] = await connection.execute("DELETE FROM matcha.match WHERE id_user0 = ? AND id_user1 = ? ;", [req.body.id, req.session.userid]);
+            var [unmatch_2] = await connection.execute("DELETE FROM matcha.match WHERE id_user1 = ? AND id_user0 = ? ;", [req.body.id, req.session.userid]);
+            var [notif_unmatch1] = await connection.execute("DELETE FROM matcha.notification WHERE notifier = ? AND notified = ? AND type = 5 ;", [req.session.userid, req.body.id]);
+            var [notif_unmatch2] = await connection.execute("INSERT INTO matcha.notification (notifier, notified, type, time) VALUES(?, ?, 5, now());", [req.session.userid, req.body.id]);
+        }
+        var [unlike] = await  connection.execute("DELETE FROM matcha.like WHERE liker = ? AND liked = ? ;", [req.session.userid, req.body.id]);
+        var [unrate] = await connection.execute("UPDATE user SET rating = rating - 100 WHERE id = ? ;", [req.body.id]);        
     }
 
     res.redirect('/connections');

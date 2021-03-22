@@ -34,7 +34,15 @@ if (req.session.userid != 0)
         else
             var [active_0] = await connection.execute("UPDATE user SET active = 0 WHERE id = ? ;", [req.session.userid]);
 
-        res.render('profile', { title: 'Profile', row, tags, session});
+        var notif = 0;
+        
+        var [check_notif] = await connection.execute("SELECT * FROM notification WHERE notified = ? AND is_read = 0;", [req.session.userid]);
+        if (check_notif.length) {
+            notif = 1;
+        }
+        
+
+        res.render('profile', { title: 'Profile', row, tags, notif});
     }
     else
         res.redirect('login');

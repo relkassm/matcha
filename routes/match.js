@@ -207,11 +207,17 @@ router.post('/', async (req, res) => {
         fame = req.body.range_2;
     }
     if (req.body.like) {
-        const [like] = await  connection.execute("INSERT INTO matcha.like (liker, liked) VALUES(?, ?);", [connected.id, req.body.id]);
-        const [rate] = await connection.execute("UPDATE user SET rating = rating + 100 WHERE id = ? ;", [req.body.id]);
-        var [check_match] = await connection.execute("SELECT * FROM matcha.like WHERE liker = ? AND liked = ?;", [req.body.id, connected.id]);
-        if (check_match.length)
-            var [match] = await connection.execute("INSERT INTO matcha.match (id_user0, id_user1, time) VALUES(?, ?, now());", [req.body.id, connected.id]);
+        var [like_1] = await  connection.execute("INSERT INTO matcha.like (liker, liked) VALUES(?, ?);", [connected.id, req.body.id]);
+        var [rate] = await connection.execute("UPDATE user SET rating = rating + 100 WHERE id = ? ;", [req.body.id]);
+        var [match] = await connection.execute("SELECT * FROM matcha.like WHERE liker = ? AND liked = ?;", [req.body.id, connected.id]);
+        if (match.length) {
+            var [match_2] = await connection.execute("INSERT INTO matcha.match (id_user0, id_user1, time) VALUES(?, ?, now());", [req.body.id, connected.id]);
+            var [notif_match1] = await connection.execute("DELETE FROM matcha.notification WHERE notifier = ? AND notified = ? AND type = 4 ;", [connected.id, req.body.id]);
+            var [notif_match2] = await connection.execute("INSERT INTO matcha.notification (notifier, notified, type, time) VALUES(?, ?, 4, now());", [connected.id, req.body.id]);
+        } else {
+            var [notif_like1] = await connection.execute("DELETE FROM matcha.notification WHERE notifier = ? AND notified = ? AND type = 1 ;", [connected.id, req.body.id]);
+            var [notif_like2] = await connection.execute("INSERT INTO matcha.notification (notifier, notified, type, time) VALUES(?, ?, 1, now());", [connected.id, req.body.id]);
+        }
     }
     if (req.body.block) {
         var [block] = await connection.execute("INSERT INTO matcha.block (blocker, blocked) VALUES(?, ?);", [connected.id, req.body.id]);

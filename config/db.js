@@ -26,7 +26,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   age INT(6),\
                   country VARCHAR(30), \
                   confirmed INT(6) DEFAULT 0,\
-                  rating INT(6) DEFAULT 0,\
+                  rating INT(6) DEFAULT 1000,\
                   lat DECIMAL(10, 8) ,\
                   lng DECIMAL(11, 8) ,\
                   online INT(6) DEFAULT 0,\
@@ -51,15 +51,6 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.like \
                             console.log(error);
                   });
 
-connection.query("CREATE TABLE IF NOT EXISTS matcha.dislike \
-                  (disliker INT(6) UNSIGNED NOT NULL, \
-                  disliked INT(6) UNSIGNED NOT NULL, \
-                  FOREIGN KEY (disliker) REFERENCES user(id), \
-                  FOREIGN KEY (disliked) REFERENCES user(id));", (error) => {
-                        if (error)
-                            console.log(error);
-                  });
-
 connection.query("CREATE TABLE IF NOT EXISTS matcha.tag \
                   (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
                   label VARCHAR(30) NOT NULL UNIQUE);", (error) => {
@@ -70,7 +61,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.tag \
 connection.query("CREATE TABLE IF NOT EXISTS matcha.user_tag \
                   (id_user INT(6) UNSIGNED, \
                   id_tag INT(6) UNSIGNED, \
-                  time TIMESTAMP NOT NULL,\
+                  time TIMESTAMP NOT NULL, \
                   FOREIGN KEY (id_user) REFERENCES user(id), \
                   FOREIGN KEY (id_tag) REFERENCES tag(id), \
                   PRIMARY KEY (id_user, id_tag));", (error) => {
@@ -100,7 +91,7 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.report \
 connection.query("CREATE TABLE IF NOT EXISTS matcha.match \
                   (id_user0 INT(6) UNSIGNED, \
                   id_user1 INT(6) UNSIGNED, \
-                  time TIMESTAMP NOT NULL,\
+                  time DATETIME NOT NULL, \
                   FOREIGN KEY (id_user0) REFERENCES user(id), \
                   FOREIGN KEY (id_user1) REFERENCES user(id), \
                   PRIMARY KEY (id_user0, id_user1));", (error) => {
@@ -112,10 +103,34 @@ connection.query("CREATE TABLE IF NOT EXISTS matcha.message \
                   (id_message INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
                   messager INT(6) UNSIGNED NOT NULL, \
                   messaged INT(6) UNSIGNED NOT NULL, \
-                  message VARCHAR(255),\
-                  time DATETIME,\
+                  message LONGTEXT,\
+                  time DATETIME, \
                   FOREIGN KEY (messager) REFERENCES user(id), \
                   FOREIGN KEY (messaged) REFERENCES user(id) );", (error) => {
+                        if (error)
+                            console.log(error);
+});
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.visit \
+                  (id_visit INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
+                  visiter INT(6) UNSIGNED NOT NULL, \
+                  visited INT(6) UNSIGNED NOT NULL, \
+                  time DATETIME, \
+                  FOREIGN KEY (visiter) REFERENCES user(id), \
+                  FOREIGN KEY (visited) REFERENCES user(id) );", (error) => {
+                        if (error)
+                            console.log(error);
+});
+
+connection.query("CREATE TABLE IF NOT EXISTS matcha.notification \
+                  (id_notif INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,\
+                  notifier INT(6) UNSIGNED NOT NULL, \
+                  notified INT(6) UNSIGNED NOT NULL, \
+                  type INT(6), \
+                  is_read INT(6) DEFAULT 0,\
+                  time DATETIME, \
+                  FOREIGN KEY (notifier) REFERENCES user(id), \
+                  FOREIGN KEY (notified) REFERENCES user(id) );", (error) => {
                         if (error)
                             console.log(error);
 });
