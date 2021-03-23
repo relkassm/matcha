@@ -3,7 +3,6 @@ const router = express.Router();
 const connection = require('../config/db');
 const session = require('express-session');
 const util = require('util');
-const { cpuUsage } = require('process');
 
 var connected;
 var sort = 'Distance';

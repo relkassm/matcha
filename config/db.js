@@ -11,8 +11,6 @@ const connections = mysql.createPool({
 })
  const connection = connections.promise();
 
-
-connection.query('USE matcha;')
 connection.query("CREATE TABLE IF NOT EXISTS matcha.user \
                   (id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, \
                   email VARCHAR(50) NOT NULL UNIQUE, \
