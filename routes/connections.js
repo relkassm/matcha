@@ -23,7 +23,14 @@ if (req.session.userid != 0)
         var [liked] = await connection.execute("SELECT matcha.like.*, id, firstname, lastname FROM matcha.like INNER JOIN user ON liked = id \
                                                 WHERE liker = ? ;", [req.session.userid]);
 
-        res.render('connections', { title: 'Connections', row, session, matches_0, matches_1, blocked, liked});
+        var notif = 0;
+        
+        var [check_notif] = await connection.execute("SELECT * FROM notification WHERE notified = ? AND is_read = 0;", [req.session.userid]);
+        if (check_notif.length) {
+            notif = 1;
+        }
+
+        res.render('connections', { title: 'Connections', row, session, matches_0, matches_1, blocked, liked, notif});
     }
     else
         res.redirect('login');

@@ -14,7 +14,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-app.use(flash())
+// app.use(express.limit(100000000));
+app.use(flash());
 app.use((req, res, next) => {
     if (typeof(req.session.userid) == 'undefined') {
         req.session.userid = 0;
@@ -68,5 +69,6 @@ app.use(function (req, res, next) {
     res.render('404', { title: 'Error' });
     next();
 });
+
 
 

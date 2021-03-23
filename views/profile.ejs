@@ -5,7 +5,7 @@
     <%- include('./partials/nav.ejs') %>
 <div class="container">
   <div class="main-body">
-    <form method="POST">
+    <form method="POST" enctype=" multipart/form-data">
         <%- include('./partials/ErrorMsg') %>
         <div class="col-md-12 mb-3">
           <div class="card">
@@ -102,98 +102,103 @@
                 <textarea class="inputs2" id="bio" name="bio"><%= row.bio %></textarea>
               </div>
             </div>
+            <hr>
             <div class="row">
-              <div class="col-sm-3">
-                <h6 class="mb-0">Fame rating: <%= row.rating %></h6>
+                <div class="col-sm-3">
+                  <h6 class="mb-0">Fame Rating </h6>
+                </div>
+                <div class="col-sm-9 text-secondary">
+                  <text><%= row.rating %></text>
               </div>
             </div>
             </div>
-            <input type="submit" name="update"  class="submit" value="Update" id="update">
-            <div class="signup">
-              <a href="./update_pass">update password</a>
-              <div class="form-group">
-                <label for=""> Get Position By Map</label>
-                <div id="map"></div>
-                <i class="fas fa-map" id="map2" onclick="getLocation2()"></i>
+            <hr>
+            <div class="row">
+              <div id = "up">
+                <input type="submit" name="update"  class="submit2" value="Update Changes" id="update">
               </div>
-              <div class="form-group">
-                <label for="position">Get Position By GPS
-                    <i class="fas fa-map-marker-alt" id="position" onclick="getLocation()"></i>
-                </label>
-                <div class="form-group" hidden>
-                    <label for="lattitude">latitude</label>
-                    <input type="name" name='latitude' class="form-control" id="latitude"
-                        value="<%= typeof row.latitude != 'undefined' ? row.latitude : '' %>" />
-                </div>
-                <div class="form-group" hidden>
-                    <label for="longitude">longitude</label>
-                    <input type="name" name='longitude' class="form-control" id="longitude"
-                        value="<%= typeof row.longitude != 'undefined' ? row.longitude : '' %>" />
-                </div>
-            </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-12 mb-3">
-          <div class="card">
-            <div class="card-body">
-              <small>Intrests</small>
-              <div style="height: 20px">
-                <input type="text" name="tag" class="tags1" id="tag">
-                <input type="submit" name="add_tag" class="tags1" id="add_tag" value="+">
-                <input type="submit" name="remove_tag" class="tags1" id="remove_tag" value="-">
-                <input type="submit" name="reset_tag" class="tags1" id="reset_tag" value="x">
               </div>
               <hr>
-              <div>
-                <h6 id="tags" class="tags2"><%= tags %></h6>
+              <div class="row">
+              <div id = "up" >
+                <a class="submit3" href="./update_pass">update password</a>
               </div>
-              <hr>
-              <div>
-                <div class="images">
-                  <img id="pic1" class="imgs" src="<%= row.img1 %>">
-                  <img id="pic2" class="imgs" src="<%= row.img2 %>">
-                  <img id="pic3" class="imgs" src="<%= row.img3 %>">
-                  <img id="pic4" class="imgs" src="<%= row.img4 %>">
+            </div>
+                <hr>
+                <div id = "up"  class="form-group" >
+                  <label for=""> Get Position By Map</label>
+                  <div id="map"></div>
+                  <i class="fas fa-map" id="map2" onclick="getLocation2()"></i>
+                </div>
+                <div id = "up" class="form-group">
+                  <label for="position">Get Position By GPS
+                      <i class="fas fa-map-marker-alt" id="position" onclick="getLocation()"></i>
+                  </label>
+                  <div id = "up" class="form-group" hidden>
+                      <label for="lattitude">latitude</label>
+                      <input type="name" name='latitude' class="form-control" id="latitude"
+                          value="<%= typeof row.latitude != 'undefined' ? row.latitude : '' %>" />
+                  </div>
+                  <div id = "up" class="form-group" hidden>
+                      <label for="longitude">longitude</label>
+                      <input type="name" name='longitude' class="form-control" id="longitude"
+                          value="<%= typeof row.longitude != 'undefined' ? row.longitude : '' %>" />
+                  </div>
               </div>
-                <canvas id="can0" hidden></canvas>
-                <canvas id="can1" hidden></canvas>
-                <canvas id="can2" hidden></canvas>
-                <canvas id="can3" hidden></canvas>
-                <canvas id="can4" hidden></canvas>
-                <input type="hidden" value="<%= row.img0 %>" id="img0" name="img0">
-                <input type="hidden" value="<%= row.img1 %>" id="img1" name="img1">
-                <input type="hidden" value="<%= row.img2 %>" id="img2" name="img2">
-                <input type="hidden" value="<%= row.img3 %>" id="img3" name="img3">
-                <input type="hidden" value="<%= row.img4 %>" id="img4" name="img4">
-                <input type="hidden" value="<%= row.lng %>" name="lng" id="lng">
-                <input type="hidden" value="<%= row.lat %>" name="lat" id="lat">
-                <input type="file" id="f0" hidden>           
-                <input type="file" id="f1" hidden>
-                <input type="file" id="f2" hidden>
-                <input type="file" id="f3" hidden>
-                <input type="file" id="f4" hidden>
-              </div>
-              
             </div>
           </div>
-        </div>
+          <div class="col-sm-12 mb-3">
+            <div class="card h-60">
+              <div class="card-body">
+                <small>Intrests</small>
+                <div style="height: 20px">
+                  <input type="text" name="tag" class="tags1" id="tag">
+                  <input type="submit" name="add_tag" class="tags1" id="add_tag" value="+">
+                  <input type="submit" name="remove_tag" class="tags1" id="remove_tag" value="-">
+                  <input type="submit" name="reset_tag" class="tags1" id="reset_tag" value="x">
+                </div>
+                <hr>
+                <div>
+                  <h6 id="tags" class="tags2">Tags : <%= tags %></h6>
+                </div>
+                <hr>
+                <div>
+                  <div class="row">
+                      <div class="images">
+                          <img id="pic1" class="imgs" src="<%= row.img1 %>">
+                          <img id="pic2" class="imgs" src="<%= row.img2 %>">
+                          <img id="pic3" class="imgs" src="<%= row.img3 %>">
+                          <img id="pic4" class="imgs" src="<%= row.img4 %>">
+                    </div>
+                  </div>
+                  <canvas id="can0" hidden></canvas>
+                  <canvas id="can1" hidden></canvas>
+                  <canvas id="can2" hidden></canvas>
+                  <canvas id="can3" hidden></canvas>
+                  <canvas id="can4" hidden></canvas>
+                  <input type="hidden" value="<%= row.img0 %>" id="img0" name="img0">
+                  <input type="hidden" value="<%= row.img1 %>" id="img1" name="img1">
+                  <input type="hidden" value="<%= row.img2 %>" id="img2" name="img2">
+                  <input type="hidden" value="<%= row.img3 %>" id="img3" name="img3">
+                  <input type="hidden" value="<%= row.img4 %>" id="img4" name="img4">
+                  <input type="hidden" value="<%= row.lng %>" name="lng" id="lng">
+                  <input type="hidden" value="<%= row.lat %>" name="lat" id="lat">
+                  <input type="file" id="f0" hidden>           
+                  <input type="file" id="f1" hidden>
+                  <input type="file" id="f2" hidden>
+                  <input type="file" id="f3" hidden>
+                  <input type="file" id="f4" hidden>
+                </div>
+                
+              </div>
+            </div>
+          </div>
         </form>
     </div>
 </div>
 </body>
     <%- include('./partials/footer.ejs') %>
 </html>
-
-
-<script>
-
-  <% if (notif == 1) { %>
-    document.getElementById('nav-notif').style.backgroundColor = "red";
-  <% } %>
-  
-</script>
-
 
 
 <script>
@@ -309,14 +314,21 @@ function draw0() {
     can0.width = this.width;
     can0.height = this.height;
     ctx0.drawImage(this, 0, 0);
-    img0.value = can0.toDataURL();
-    $('#update').trigger('click');
+    if (can0.toDataURL().length <= 3000000) {
+      img0.value = can0.toDataURL();
+      $('#update').trigger('click');
+    }
+    else
+      failed00();
 }
 function failed0() {
     alert("Please chose a valid image file");
     f0.value = '';
 }
-
+function failed00() {
+    alert("Image too large");
+    f0.value = '';
+}
 
 
 f1.onchange = function(e) {
@@ -329,11 +341,19 @@ function draw1() {
     can1.width = this.width;
     can1.height = this.height;
     ctx1.drawImage(this, 0, 0);
-    img1.value = can1.toDataURL();
-    $('#update').trigger('click');
+    if (can1.toDataURL().length <= 3000000) {
+      img1.value = can1.toDataURL();
+      $('#update').trigger('click');
+    }
+    else
+      failed11();
 }
 function failed1() {
     alert("Please chose a valid image file");
+    f1.value = '';
+}
+function failed11() {
+    alert("Image too large");
     f1.value = '';
 }
 
@@ -349,18 +369,24 @@ function draw2() {
     can2.width = this.width;
     can2.height = this.height;
     ctx2.drawImage(this, 0, 0);
-    if (!img1.value) {
-        img1.value = can2.toDataURL();
-    } else {
-        img2.value = can2.toDataURL();
+    if (can2.toDataURL().length <= 3000000) {
+      if (!img1.value) 
+          img1.value = can2.toDataURL();
+       else 
+          img2.value = can2.toDataURL();
+      $('#update').trigger('click');
     }
-    $('#update').trigger('click');
+    else
+      failed22();
 }
 function failed2() {
     alert("Please chose a valid image file");
     f2.value = '';
 }
-
+function failed22() {
+    alert("Image too large");
+    f2.value = '';
+}
 
 
 f3.onchange = function(e) {
@@ -373,17 +399,23 @@ function draw3() {
     can3.width = this.width;
     can3.height = this.height;
     ctx3.drawImage(this, 0, 0);
-    if (!img1.value) {
-        img1.value = can3.toDataURL();
-    } else if (!img2.value) {
-        img2.value = can3.toDataURL();
-    } else {
-        img3.value = can3.toDataURL();
-    }
-    $('#update').trigger('click');
+    if (can3.toDataURL().length <= 3000000) {
+      if (!img1.value) 
+          img1.value = can3.toDataURL();
+      else if (!img2.value) 
+          img2.value = can3.toDataURL();
+      else 
+          img3.value = can3.toDataURL();
+      $('#update').trigger('click');
+    } else
+      failed33();
 }
 function failed3() {
     alert("Please chose a valid image file");
+    f3.value = '';
+}
+function failed33() {
+    alert("Image too large");
     f3.value = '';
 }
 
@@ -399,19 +431,26 @@ function draw4() {
     can4.width = this.width;
     can4.height = this.height;
     ctx4.drawImage(this, 0, 0);
-    if (!img1.value) {
-        img1.value = can4.toDataURL();
-    } else if (!img2.value) {
-        img2.value = can4.toDataURL();
-    } else if (!img3.value) {
-        img3.value = can4.toDataURL();
-    } else {
-        img4.value = can4.toDataURL();
-    }
+    if (can4.toDataURL().length <= 3000000) {
+      if (!img1.value)
+          img1.value = can4.toDataURL();
+      else if (!img2.value)
+          img2.value = can4.toDataURL();
+      else if (!img3.value)
+          img3.value = can4.toDataURL();
+      else 
+          img4.value = can4.toDataURL();
     $('#update').trigger('click');
+  }
+  else
+    failed44();
 }
 function failed4() {
     alert("Please chose a valid image file");
+    f4.value = '';
+}
+function failed44() {
+    alert("Image too large");
     f4.value = '';
 }
 
@@ -419,6 +458,6 @@ function failed4() {
 </script>
 
 <style>
-  #map { position: absolute; top: 0; bottom: 0; width: 100%;height: 50%;display:none }
+  #map { position: absolute; top: 30; bottom: 0; width: 50%;height: 40%;display:none }
 </style>
   

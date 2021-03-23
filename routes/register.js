@@ -9,7 +9,6 @@ const { filter } = require('mysql2/lib/constants/charset_encodings')
 
 
 router.get('/', (req, res) => {
-    //mailer.mailer("haitam.dardari@gmail.com","iuzaheuiazhe","working");
     if (req.session.userid == 0)
         res.render('register', { title: 'Sign Up' });
     else

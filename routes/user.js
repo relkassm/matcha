@@ -17,6 +17,15 @@ if (req.session.userid != 0)
         const id_param = req.params.id;
         if (id_param != req.session.userid) {
             var [rowss] = await  connection.execute("SELECT * FROM user WHERE id = ? AND active = 1;", [req.session.userid]);
+
+
+            var notif = 0;
+        
+            var [check_notif] = await connection.execute("SELECT * FROM notification WHERE notified = ? AND is_read = 0;", [req.session.userid]);
+            if (check_notif.length) {
+                notif = 1;
+            }
+
             if (rowss.length)
             {
                 connected = rowss[0];
@@ -57,7 +66,7 @@ if (req.session.userid != 0)
                     var [notif_visit1] = await connection.execute("DELETE FROM matcha.notification WHERE notifier = ? AND notified = ? AND type = 2 ;", [connected.id, row.id]);
                     var [notif_visit2] = await connection.execute("INSERT INTO matcha.notification (notifier, notified, type, time) VALUES(?, ?, 2, now());", [connected.id, row.id]);
 
-                    res.render('user', { title: 'User', row, tags, is_liked, is_match, messages});
+                    res.render('user', { title: 'User', row, tags, is_liked, is_match, messages, notif});
                 }
                 else
                     res.redirect('/405');

@@ -31,6 +31,14 @@ router.get('/',async (req, res) =>  {
     {
         ss = req.session;
         var [rowss] = await  connection.execute("SELECT * FROM user WHERE id = ? AND active = 1;", [ss.userid]);
+
+        var notif = 0;
+        
+        var [check_notif] = await connection.execute("SELECT * FROM notification WHERE notified = ? AND is_read = 0;", [req.session.userid]);
+        if (check_notif.length) {
+            notif = 1;
+        }
+
         if (rowss.length) {
             connected = rowss[0];
             if (connected.gender == 'Man') {
@@ -132,12 +140,12 @@ router.get('/',async (req, res) =>  {
                                             }
                                         }
                                     }
-                                    res.render('match', { title: 'Match', rw, sort, order, distance_range, age_0, age_1, common_count, fame});
+                                    res.render('match', { title: 'Match', rw, sort, order, distance_range, age_0, age_1, common_count, fame, notif});
                                 }
                                 if (i == rows.length - 1 && typeof(index) != 'undefined')
                                     setTimeout(render0, 100);
                                 if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                        res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                                        res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, notif});
                         }
                     }
                     else {
@@ -177,16 +185,16 @@ router.get('/',async (req, res) =>  {
                                 rw[row_lnt].common = common_tagsfinal;
                             }
                                 function render0() {
-                                    res.render('match', { title: 'Match', rw, sort, order, distance_range, age_0, age_1, common_count, fame});
+                                    res.render('match', { title: 'Match', rw, sort, order, distance_range, age_0, age_1, common_count, fame, notif});
                                 }
                                 if (i == rows.length - 1 && typeof(index) != 'undefined')
                                     setTimeout(render0, 50);
                                 if (i == rows.length - 1 && typeof(index) == 'undefined')
-                                    res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                                    res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, notif});
                         }
                     }
                 } else {
-                    res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame});
+                    res.render('match', { title: 'Match | No User Found', sort, order, distance_range, age_0, age_1, common_count, fame, notif});
                 }
         }
         else

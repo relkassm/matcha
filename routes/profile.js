@@ -1,16 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const connection = require('../config/db');
-const session = require('express-session');
 const axios = require('axios');
-const geolocation = require('geolocation');
-const { Navigator } = require("node-navigator");
-const navigator = new Navigator();
 const Validator = require('./helpers/Validator');
 const val = require("./helpers/checker")
-var fs = require('fs');
 var wc = require('which-country');
 var countries = require("i18n-iso-countries");
+var uniqid = require('uniqid');
+const multer = require('multer');
 global.temp = "";
 
 
@@ -43,6 +40,7 @@ if (req.session.userid != 0)
         
 
         res.render('profile', { title: 'Profile', row, tags, notif});
+
     }
     else
         res.redirect('login');
@@ -52,6 +50,7 @@ router.post('/', async (req, res) => {
     var tags = global.temp;
     const errors = [];
     const id = req.session.userid;
+    var rating;
     var [row] = await connection.execute("SELECT * FROM user WHERE user.id = ?",[req.session.userid]);
     var { firstname, lastname, username, email,age,gender,sexualPreference,bio,img0,img1,img2,img3,img4} = req.body;
     const [user_sess] = await connection.execute("SELECT username FROM user WHERE user.id = ?",[req.session.userid]);
@@ -60,6 +59,10 @@ router.post('/', async (req, res) => {
     const [firstname_sess] = await connection.execute("SELECT firstname FROM user WHERE user.id = ?",[req.session.userid]);
     const [lastname_sess] = await connection.execute("SELECT lastname FROM user WHERE user.id = ?",[req.session.userid]);
     const [email_sess] = await connection.execute("SELECT email FROM user WHERE user.id = ?",[req.session.userid]);
+    const [rating_sess] = await connection.execute("SELECT rating FROM user WHERE user.id = ?",[req.session.userid]);
+
+    
+   
     if (!firstname || !username || !lastname || !email || !age) {
         errors.push({ msg: 'Please fill in all fields' });
     }
@@ -67,7 +70,7 @@ router.post('/', async (req, res) => {
         if (!Validator.checkUsername(username)){
             errors.push({ msg: "Username should be between 6 And 30 And have only characters and _ - symbols" });
             username =  user_sess[0].username;
-        }
+        }   
  
         if(user_sess[0]){
             if (await val.checkUsername2(username) && username != user_sess[0].username){
@@ -100,15 +103,23 @@ router.post('/', async (req, res) => {
                 errors.push({ msg: 'Email already in use' });
             }
         }
+        if(rating_sess[0])
+            rating  = rating_sess[0].rating;
     }
     if (errors.length > 0) {
+        rating  = rating_sess[0].rating;
         res.render('profile.ejs',{
             'errors': errors,
-            'row': { firstname, lastname, username, email, age, bio, gender, sexualPreference, img0, img1, img2, img3, img4},
+            'row': { firstname, lastname, username, email, age, bio,rating, gender, sexualPreference, img0, img1, img2, img3, img4},
             tags
         });
     } else {
         if (req.body.update) {
+                //console.log (req.file.filename)
+                /*res.render('profile.ejs', {
+                 'row':{},
+                  file: `uploads/${req.file.filename}`
+                });*/
             var lat = req.body.lat;
             var lng = req.body.lng;
             var loc;
@@ -127,6 +138,7 @@ router.post('/', async (req, res) => {
                 lng = user_lng[0].lng;
             }
             var country = countries.getName(wc([lng, lat]), "en", {select: "official"});
+            //console.log(req.body.img0);
             await connection.query("UPDATE user SET email = ?,\
                                 username = ?, \
                                 lastname = ?, \
