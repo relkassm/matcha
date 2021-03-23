@@ -18,6 +18,8 @@ if (req.session.userid != 0)
 
             res.render('notifications', { title: 'notifications', notif});
         }
+        else
+            res.render('notifications', { title: 'notifications'});
     }
     else
         res.redirect('/login');

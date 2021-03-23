@@ -37,7 +37,6 @@ if (req.session.userid != 0)
         if (check_notif.length) {
             notif = 1;
         }
-        
 
         res.render('profile', { title: 'Profile', row, tags, notif});
 
