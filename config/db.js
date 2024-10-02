@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const connections = mysql.createPool({
    host: 'localhost',
    user: 'root',
-   password: 'pass',
+   password: 'password',
    database: 'matcha',
    waitForConnections: true,
    connectionLimit: 10,
